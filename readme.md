@@ -1,9 +1,9 @@
-# SteelVector - Proiect Tehnici Web
+# SteelVector
 ## Etapa 1: Structura HTML și Conținut Semantic
 
-Acest proiect reprezintă prima etapă a site-ului **SteelVector**, o platformă dedicată distribuției de structuri metalice și europrofile pentru hale industriale. Pagina este construită utilizând standardele moderne HTML5, punând accent pe semantica documentului, accesibilitate și optimizarea pentru motoarele de căutare.
+Acesta reprezintă prima etapă a site-ului **SteelVector**, o platformă dedicată distribuției de structuri metalice și europrofile pentru hale industriale. 
 
-### Indexul Task-urilor (Documentație Prezentare)
+### Indexul Task-urilor
 
 Tabelul de mai jos corelează cerințele proiectului cu liniile de cod corespunzătoare din fișierul `index.html` pentru a facilita prezentarea.
 
@@ -44,7 +44,6 @@ Tabelul de mai jos corelează cerințele proiectului cu liniile de cod corespunz
 * **Afișare PDF (Liniile 421-424):** Catalogul tehnic integrat direct în pagină prin tag-ul `<embed>`.
 * **Harta de Imagini (Liniile 335-351):** Navigare vizuală folosind `<map>` și `<area>` (forme: `rect`, `circle`, `poly`).
 * **Google Maps Iframe (Liniile 446-454):** Integrare hartă interactivă pentru sediul facultății.
-* **YouTube Playlist Control:** Parametri URL pentru autoplay și loop direct în iframe-ul video.
 
 ---
 *Proiect realizat de: **Flintasu Bogdan Ionut***
