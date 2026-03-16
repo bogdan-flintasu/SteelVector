@@ -26,6 +26,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Saira:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>SteelVector</title>
 </head>
 
@@ -73,7 +74,7 @@
             </ul>
         
         </li>
-        <li><a href="#"><i class="fa-regular fa-envelope"></i> Contact</a></li>
+        <li><a href="#"><i class="fa-regular fa-envelope fa-shake"></i> Contact</a></li>
         </ul>
     </nav>
     <header>
@@ -408,7 +409,6 @@
                 </details>
             </section>
 
-        </div>
         <section id="galerie-statica">
             <h2>Galerie Proiecte</h2>
             <div id="grid-galerie">
@@ -434,15 +434,6 @@
                         <figcaption>Click pe panouri (Produse, Promoții, Orar) pentru navigare.</figcaption>
                     </figure>
                 </section>
-                <figure>
-                    <img src="resurse/imagini/galerie/U.jpg" alt="ProfilU">
-                    <figcaption>Profil U</figcaption>
-                </figure>
-                <figure>
-                    <img src="resurse/imagini/galerie/L.png" alt="ProfilL">
-                    <figcaption>Profil L</figcaption>
-                </figure>
-
             </div>
         </section>
         <section id="ghid">
@@ -513,13 +504,18 @@
                     </math>
                 </p>
             </article>
+
         </section>
 
-        <article id="catalog-pdf">
-            <h3>Catalog Tehnic (PDF)</h3>
-            <embed src="resurse/pdf/catalog_produse.pdf" type="application/pdf" width="800" height="600"
-                style="width:100%;">
-        </article>
+        <section id="pdf">
+            <article id="catalog-pdf">
+                <h3>Catalog Tehnic (PDF)</h3>
+                <embed src="resurse/pdf/catalog_produse.pdf" type="application/pdf" width="800" height="600"
+                    style="width:100%;">
+            </article>
+        </section>
+
+    </div>
 
     </main>
 
@@ -546,7 +542,11 @@
             </iframe>
         </address>
         <hr>
-        <a href="#" title="Sari la începutul paginii" id="link-top">mergi sus</a>
+        <a href="#" id="link-top" data-tooltip="Înapoi sus">
+            <div id="top-container">
+                <span id="top-sageata">&#129081;</span>
+            </div>
+        </a>
         <p>
             <small>
                 Copyright &copy; 2026 Flintasu Bogdan Ionut. <br>

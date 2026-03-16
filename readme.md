@@ -45,5 +45,27 @@ Tabelul de mai jos corelează cerințele proiectului cu liniile de cod corespunz
 * **Harta de Imagini (Liniile 335-351):** Navigare vizuală folosind `<map>` și `<area>` (forme: `rect`, `circle`, `poly`).
 * **Google Maps Iframe (Liniile 446-454):** Integrare hartă interactivă pentru sediul facultății.
 
+## Etapa 2: Stilizare CSS și Layout Responsive
+
+În această etapă s-a realizat designul vizual, poziționarea elementelor și adaptabilitatea site-ului pe diferite dimensiuni de ecran. 
+
+**Justificarea Schemei Cromatice:** S-a ales o combinație de Albastru Marin/Oțel (siguranță, industrial) și Portocaliu (atenție, șantier, dinamic) pentru a obține un contrast puternic și a ghida utilizatorul vizual (F-pattern pentru zona de prezentare).
+
+### Indexul Task-urilor
+
+| Task | Fișier și Linii | Descriere Implementare |
+| :--- | :--- | :--- |
+| **Schema Cromatică** | `general.css`: 59-67 | Definirea a 5 culori prin variabile CSS în `body` și utilizarea lor (`var()`). |
+| **Design Rudimentar** | `general.css`: 80-85, 104-118 | Izolare cu 3 efecte (`border`, `background`, `border-radius`), spațiere cu `gap`, imagini cu `width` și `min-width`. |
+| **Layout Responsive** | `general.css`: 93-102, 310-360 | Sistem CSS Grid (`grid-template-areas`) asimetric. Media queries pt. 2 coloane (1200px) și o coloană mobil (700px). Font tranzitat. |
+| **Iconuri & Font Extern** | `index.html`: 24, 64 | Import Google Fonts și FontAwesome CDN. Iconiță statică și una animată (`fa-shake`) în meniu. |
+| **Stilizare Tabel** | `general.css`: 180-230 | Capțiune jos (`caption-side`), borduri alternate (`nth-child`), delimitatoare groase și hover animat cu umbră internă. |
+| **Stilizare Taburi** | `general.css`: 140-178 | Layout elemente iframe cu Flexbox. Efect de subliniere animată la hover folosind pseudo-elementul `::after`. |
+| **Link Top** | `index.html`: 462<br>`general.css`: 232-280 | Buton `fixed`, semi-transparent, săgeată centrată `&#129081;`, rotație -15deg, scalare și tooltip afișat din CSS (`::after`). |
+
+### Bonusuri Implementate (Etapa 2)
+
+* **Reset CSS și Unități Relative (`general.css`: 1-57):** CSS Reset. Redefinirea elementelor de bază (`h1-h6`, liste) folosind strict unități relative (`rem`).
+* **Stilizare MathML (`general.css`: 282-308):** Stilizare avansată a formulei. Culori, grosimi și opacități diferite pentru variabile (`mi`), operatori (`mo`) și exponenți (`mn`).
 ---
 *Proiect realizat de: **Flintasu Bogdan Ionut***
