@@ -509,7 +509,7 @@ figure>img {
     }
 
     #grid-pagina {
-        grid-template-columns: 1fr 1fr; /* Două coloane pe mediu */
+        grid-template-columns: 1fr 1fr;
         grid-template-areas: 
             "welcome welcome"
             "orar orar"
