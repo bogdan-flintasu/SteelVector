@@ -1,0 +1,31 @@
+{
+  "name": "proiect-tw",
+  "version": "1.0.0",
+  "description": "Acesta reprezintă prima etapă a site-ului **SteelVector**, o platformă dedicată distribuției de structuri metalice și europrofile pentru hale industriale.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "metale",
+    "structuri metalice",
+    "IPE",
+    "hala",
+    "HEA",
+    "HEB",
+    "profile",
+    "bare",
+    "tije",
+    "hala",
+    "grinzi",
+    "otel",
+    "construcții",
+    "depozit"
+  ],
+  "author": "Flintasu Bogdan Ionut",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^5.0.1",
+    "express": "^5.2.1"
+  }
+}
