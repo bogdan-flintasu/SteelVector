@@ -225,7 +225,7 @@ main a:active {
 
 /* Simbol pentru linkuri externe */
 main a[href^="http"]::before {
-    content: "\2B73";
+    content: "⮳";
     display: inline-block;
     margin-right: 0.25em;
     font-size: 1.5em;
