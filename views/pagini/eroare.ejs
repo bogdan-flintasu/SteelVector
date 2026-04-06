@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <title><%= titlu %></title>
+    <%- include('../fragmente/head') %>
+</head>
+
+<body class="saira">
+    <%- include('../fragmente/header') %>
+
+    <main>
+        <section id="pagina-eroare" style="padding:2rem; text-align:center;">
+            <h2><%= titlu %></h2>
+            <p><%= text %></p>
+            <% if (imagine) { %>
+                <img src="<%= imagine %>" alt="Imagine eroare" style="max-width: min(90vw, 500px); height:auto; border-radius:12px;">
+            <% } %>
+            <p style="margin-top:1rem;"><a href="/">Inapoi la pagina principala</a></p>
+        </section>
+    </main>
+
+    <%- include('../fragmente/footer') %>
+</body>
+
+</html>

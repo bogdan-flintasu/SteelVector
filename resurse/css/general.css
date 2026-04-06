@@ -161,6 +161,7 @@ body {
     --culoare-highlight: #1C2B39;
     --culoare-text: #222222;
     --culoare-titlu: #EDF1F5;
+    --culoare-link-vizitat: #7fb3d5;
     --margine: 6.6rem;
     --gap-grid: 1.1rem;
     background-color: var(--culoare_background);
@@ -189,6 +190,94 @@ embed {
 main {
     margin-left: var(--margine);
     margin-right: var(--margine);
+}
+
+/* Linkuri din continut (nu meniu) */
+main a {
+    color: var(--culoare-contur);
+    text-decoration: none;
+    position: relative;
+    background-image: radial-gradient(circle,
+            rgba(249, 155, 65, 0.35) 0%,
+            rgba(249, 155, 65, 0.35) 40%,
+            rgba(249, 155, 65, 0) 80%,
+            rgba(249, 155, 65, 0) 100%);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 0%;
+    transition: background-size 0.35s ease, border-color 0.2s ease;
+    border: 0.12rem solid transparent;
+    border-radius: 0.3rem;
+    padding: 0.05rem 0.2rem;
+}
+
+main a:visited {
+    color: var(--culoare-link-vizitat);
+}
+
+main a:hover {
+    background-size: 100%;
+}
+
+main a:active {
+    border-color: var(--culoare-contur);
+}
+
+/* Simbol pentru linkuri externe */
+main a[href^="http"]::before {
+    content: "\2B73";
+    display: inline-block;
+    margin-right: 0.25em;
+    font-size: 1.5em;
+    line-height: 1;
+    color: var(--culoare-titlu);
+    transition: color 0.2s ease;
+}
+
+main a[href^="http"]:hover::before {
+    color: var(--culoare-contur);
+}
+
+/* Asiguram acelasi efect si pe linkurile din zona de taburi iframe */
+.taburi-iframe > a {
+    background-image: radial-gradient(circle,
+            rgba(249, 155, 65, 0.35) 0%,
+            rgba(249, 155, 65, 0.35) 40%,
+            rgba(249, 155, 65, 0) 80%,
+            rgba(249, 155, 65, 0) 100%);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 0%;
+}
+
+.taburi-iframe > a:hover {
+    background-size: 100%;
+}
+
+.taburi-iframe > a:active {
+    border: 0.12rem solid var(--culoare-contur);
+}
+
+/* Video responsiv cu limite min/max */
+#stil-video video {
+    width: 85%;
+    min-width: 18rem;
+    max-width: 46rem;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 0.5rem;
+    border: 2px solid var(--culoare-contur);
+}
+
+/* Stil subtitrare VTT cu gradient pe text */
+#stil-video video::cue {
+    background: linear-gradient(90deg, #14273a 0%, #213f58 100%);
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    font-weight: 700;
+    line-height: 1.25;
 }
 
 .saira {
@@ -561,6 +650,11 @@ figure>img {
 
     iframe[name="ifr-video"] {
         height: 14rem;  
+    }
+
+    #stil-video video {
+        width: 95%;
+        min-width: 14rem;
     }
 
     #top-container {

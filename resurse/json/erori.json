@@ -1,0 +1,38 @@
+{
+  "cale_baza": "resurse/imagini/galerie",
+  "eroare_default": {
+    "titlu": "Eroare server",
+    "text": "A aparut o eroare neasteptata. Va rugam sa reincarcati pagina.",
+    "imagine": "SteelVector-prezentare.png"
+  },
+  "info_erori": [
+    {
+      "identificator": 400,
+      "status": true,
+      "titlu": "400 - Bad Request",
+      "text": "Cererea este invalida. Accesul direct la fisiere .ejs nu este permis.",
+      "imagine": "L.png"
+    },
+    {
+      "identificator": 403,
+      "status": true,
+      "titlu": "403 - Forbidden",
+      "text": "Nu aveti permisiunea sa accesati direct acest folder din resurse.",
+      "imagine": "U.jpg"
+    },
+    {
+      "identificator": 404,
+      "status": true,
+      "titlu": "404 - Pagina nu exista",
+      "text": "Pagina ceruta nu a fost gasita pe server.",
+      "imagine": "Depozit-produse-metalurgice-mid.jpg"
+    },
+    {
+      "identificator": 500,
+      "status": true,
+      "titlu": "500 - Eroare interna",
+      "text": "A aparut o eroare interna. Incercati din nou mai tarziu.",
+      "imagine": "Depozit-produse-metalurgice.jpg"
+    }
+  ]
+}
