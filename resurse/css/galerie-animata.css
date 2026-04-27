@@ -1,0 +1,66 @@
+.galerie-animata-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.galerie-animata-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 840px;
+  height: 280px;
+  overflow: hidden;
+  border-width: 8px;
+  border-style: solid;
+  border-image: url("/resurse/imagini/galerie/SteelVector-prezentare.png") 30 round;
+}
+
+.galerie-animata-inner {
+  display: contents;
+  animation: slideGalerie 13.5s linear infinite alternate;
+}
+
+.galerie-animata-grid:hover .galerie-animata-inner {
+  animation-play-state: paused;
+}
+
+.galerie-animata-item img {
+  width: 280px;
+  height: 280px;
+  object-fit: cover;
+}
+
+@keyframes slideGalerie {
+  0.0% {
+    transform: translate(0%, 0%) rotate(0deg);
+  }
+  12.5% {
+    transform: translate(-100%, 0%) rotate(360deg);
+  }
+  25.0% {
+    transform: translate(-200%, 0%) rotate(0deg);
+  }
+  37.5% {
+    transform: translate(0%, -100%) rotate(360deg);
+  }
+  50.0% {
+    transform: translate(-100%, -100%) rotate(0deg);
+  }
+  62.5% {
+    transform: translate(-200%, -100%) rotate(360deg);
+  }
+  75.0% {
+    transform: translate(0%, -200%) rotate(0deg);
+  }
+  87.5% {
+    transform: translate(-100%, -200%) rotate(360deg);
+  }
+  100.0% {
+    transform: translate(-200%, -200%) rotate(0deg);
+  }
+}
+@media (max-width: 1099px) {
+  .galerie-animata-wrapper {
+    display: none;
+  }
+}

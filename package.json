@@ -4,7 +4,8 @@
   "description": "Acesta reprezintă prima etapă a site-ului **SteelVector**, o platformă dedicată distribuției de structuri metalice și europrofile pentru hale industriale.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node index.js"
   },
   "keywords": [
     "metale",
@@ -25,7 +26,10 @@
   "author": "Flintasu Bogdan Ionut",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^5.3.3",
     "ejs": "^5.0.1",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "sass": "^1.80.6",
+    "sharp": "^0.33.4"
   }
 }

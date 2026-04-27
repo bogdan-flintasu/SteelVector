@@ -1,0 +1,22 @@
+<section class="galerie-wrapper">
+  <% imagini.forEach((img) => {
+    const extIndex = img.fisier.lastIndexOf('.');
+    const numeBase = extIndex >= 0 ? img.fisier.slice(0, extIndex) : img.fisier;
+    const extStr = extIndex >= 0 ? img.fisier.slice(extIndex) : "";
+    const altText = img.alt || img.titlu || "";
+  %>
+  <figure class="galerie-item">
+    <picture>
+      <source media="(max-width: 767px)" srcset="<%= caleGalerie %>/<%= numeBase %>_sm<%= extStr %>">
+      <source media="(max-width: 1099px)" srcset="<%= caleGalerie %>/<%= numeBase %>_md<%= extStr %>">
+      <img src="<%= caleGalerie %>/<%= img.fisier %>" alt="<%= altText %>" title="<%= img.descriere || img.titlu || "" %>" loading="lazy">
+    </picture>
+    <figcaption>
+      <span class="index-imagine"></span><%= img.descriere || img.titlu || "" %>
+      <% if (img.atribuire) { %>
+        <small class="atribuire">Foto: <a href="<%= img.atribuire.sursa %>" target="_blank"><%= img.atribuire.autor %></a> (<%= img.atribuire.licenta %>)</small>
+      <% } %>
+    </figcaption>
+  </figure>
+  <% }) %>
+</section>

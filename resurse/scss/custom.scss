@@ -1,0 +1,218 @@
+// =============================================================
+//  SteelVector — Bootstrap 5 customizare cromatie
+//  Compilat automat prin compileazaScss() la pornirea serverului
+// =============================================================
+
+// Importam modulul color din sass pentru a evita functiile deprecate
+@use "sass:color";
+
+// ── Culori principale (schema cromatică SteelVector) ──────────
+$sv-orange:   #f99b41;   // portocaliu brand
+$sv-dark:     #1c2b39;   // albastru-inchis brand
+$sv-deep:     #0f1c27;   // fundal prim
+$sv-mid:      #2c3e50;   // albastru mediu
+$sv-light:    #e8edf2;   // text deschis
+$sv-accent:   #3498db;   // albastru accent
+$sv-success:  #2ecc71;
+$sv-warning:  #f1c40f;
+$sv-danger:   #e74c3c;
+
+// ── Tema cromatie ─────────────────────────────────────────────
+// Remap Bootstrap theme-colors cu culorile SteelVector
+$theme-colors: (
+  "primary":   $sv-orange,
+  "secondary": $sv-dark,
+  "success":   $sv-success,
+  "info":      $sv-accent,
+  "warning":   $sv-warning,
+  "danger":    $sv-danger,
+  "light":     #dfe6ed,
+  "dark":      $sv-deep
+);
+
+// ── Culori de fundal pentru teme Bootstrap (minim 2 teme) ─────
+// Tema 1: „Steel Dark" (implicit – dark mode industrial)
+$body-bg:             $sv-deep;
+$body-color:          $sv-light;
+$headings-color:      #f5f7f9;
+
+// ── Culori font/litere ────────────────────────────────────────
+// Butoane primare: text alb pe portocaliu
+$btn-color:              #fff;
+// Badge text warning: text inchis pentru contrast
+$badge-color:            $sv-deep;
+// Link color
+$link-color:             $sv-orange;
+$link-hover-color:       color.adjust($sv-orange, $lightness: 12%);
+// Alert primary text
+$alert-color-scale:      -80%;
+
+// ── Familia de font implicita ─────────────────────────────────
+$font-family-sans-serif: "Saira", "Inter", system-ui, sans-serif;
+$headings-font-family:   "Merriweather", Georgia, serif;
+$font-size-base:         1rem;
+
+// ── Dimensiuni ecran custom (md si lg diferite fata de default) ─
+// Bootstrap default: md=768px, lg=992px
+// Modificam: md=860px, lg=1220px (cerinta individuala)
+$grid-breakpoints: (
+  xs:  0,
+  sm:  540px,
+  md:  860px,      // ecran mediu — custom (Bootstrap default: 768)
+  lg:  1220px,     // ecran mare  — custom (Bootstrap default: 992)
+  xl:  1500px,
+  xxl: 1700px
+);
+
+// Container max-widths corespunzatoare
+$container-max-widths: (
+  sm:  520px,
+  md:  840px,
+  lg:  1180px,
+  xl:  1460px,
+  xxl: 1660px
+);
+
+// ── Dimensiunea razelor de border ─────────────────────────────
+$border-radius:        0.65rem;
+$border-radius-sm:     0.4rem;
+$border-radius-lg:     0.9rem;
+$border-radius-xl:     1.2rem;
+$border-radius-pill:   50rem;
+
+// ── Dimensiunea literelor headingurilor ───────────────────────
+$h1-font-size: 2.8rem;
+$h2-font-size: 2.1rem;
+$h3-font-size: 1.6rem;
+$h4-font-size: 1.3rem;
+$h5-font-size: 1.1rem;
+$h6-font-size: 0.95rem;
+
+// ── Variabile suplimentare alese ──────────────────────────────
+$btn-padding-y:       0.55rem;
+$btn-padding-x:       1.2rem;
+$btn-font-weight:     600;
+$btn-border-radius:   $border-radius;
+
+$input-bg:            color.adjust($sv-dark, $lightness: 5%);
+$input-color:         $sv-light;
+$input-border-color:  $sv-orange;
+$input-focus-border-color: color.adjust($sv-orange, $lightness: 15%);
+
+$card-bg:             $sv-dark;
+$card-color:          $sv-light;
+$card-border-color:   rgba($sv-orange, 0.35);
+$card-cap-bg:         rgba($sv-orange, 0.12);
+
+$modal-content-bg:           $sv-dark;
+$modal-content-color:        $sv-light;
+$modal-header-border-color:  $sv-orange;
+
+$box-shadow:  0 0.65rem 1.4rem rgba(0, 0, 0, 0.4);
+$box-shadow-sm: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.3);
+
+$navbar-dark-color:          $sv-light;
+$navbar-dark-hover-color:    $sv-orange;
+$navbar-dark-active-color:   $sv-orange;
+
+$table-color:             $sv-light;
+$table-bg:                transparent;
+$table-border-color:      rgba($sv-orange, 0.3);
+$table-striped-bg:        rgba($sv-orange, 0.06);
+$table-hover-bg:          rgba($sv-orange, 0.12);
+
+// ── Import Bootstrap complet ──────────────────────────────────
+@import "bootstrap/scss/bootstrap";
+
+// ── Import fisiere locale ─────────────────────────────────────
+@import "overrides";
+@import "effects";
+@import "galerie";
+
+// =============================================================
+//  Tema 1: „Steel Dark" — dark mode industrial (aplicata global)
+//  (body-bg si body-color de mai sus constituie aceasta tema)
+// =============================================================
+
+// =============================================================
+//  Tema 2: „Steel Light" — modul deschis, aplicat cu .tema-light
+// =============================================================
+.tema-light {
+  --bs-body-bg:     #dfe6ed;
+  --bs-body-color:  #1c2b39;
+  background-color: #dfe6ed !important;
+  color: #1c2b39 !important;
+
+  .card {
+    background-color: #fff;
+    color: #1c2b39;
+    border-color: rgba($sv-orange, 0.5);
+  }
+
+  .btn-primary {
+    background-color: $sv-orange;
+    border-color: color.adjust($sv-orange, $lightness: -8%);
+    color: #fff;
+
+    &:hover {
+      background-color: color.adjust($sv-orange, $lightness: -10%);
+    }
+  }
+
+  .alert-primary {
+    background-color: color.adjust($sv-orange, $lightness: 35%);
+    border-color: $sv-orange;
+    color: color.adjust($sv-orange, $lightness: -30%);
+  }
+
+  .badge {
+    background-color: $sv-orange;
+    color: #fff;
+  }
+}
+
+// =============================================================
+//  Componente Bootstrap — elemente de demonstratie cu teme
+// =============================================================
+.bootstrap-demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  align-items: flex-start;
+}
+
+.bootstrap-demo .btn {
+  margin-right: 0.25rem;
+}
+
+// Card demo (tema dark, culori SteelVector)
+.card-sv {
+  background-color: $sv-dark;
+  border: 1px solid rgba($sv-orange, 0.4);
+  border-radius: $border-radius;
+  color: $sv-light;
+
+  .card-header {
+    background-color: rgba($sv-orange, 0.15);
+    border-bottom: 1px solid rgba($sv-orange, 0.4);
+    font-weight: 700;
+    color: $sv-orange;
+  }
+}
+
+// Navbar demo (Bootstrap navbar cu stilizare SteelVector)
+.navbar-sv {
+  background-color: $sv-dark !important;
+  border-bottom: 2px solid $sv-orange;
+
+  .navbar-brand,
+  .nav-link {
+    color: $sv-light !important;
+    font-weight: 600;
+
+    &:hover {
+      color: $sv-orange !important;
+    }
+  }
+}

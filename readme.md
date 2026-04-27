@@ -68,4 +68,28 @@ Tabelul de mai jos corelează cerințele proiectului cu liniile de cod corespunz
 * **Reset CSS și Unități Relative (`general.css`: 1-57):** CSS Reset. Redefinirea elementelor de bază (`h1-h6`, liste) folosind strict unități relative (`rem`).
 * **Stilizare MathML (`general.css`: 282-308):** Stilizare avansată a formulei. Culori, grosimi și opacități diferite pentru variabile (`mi`), operatori (`mo`) și exponenți (`mn`).
 ---
+## Etapa 5: SCSS Automat · Bootstrap Custom · Efecte CSS · Galerie Statică & Animată
+
+În această etapă s-au adăugat compilarea automată SCSS cu backup, personalizarea Bootstrap prin SASS și un set de efecte CSS (total 0.25p), plus galerie statică și galerie animată.
+
+### Indexul Task-urilor (Etapa 5)
+
+| Task | Fișier și Linii | Descriere Implementare |
+| :--- | :--- | :--- |
+| **Galerie statică (cerință individuală)** | `resurse/json/galerie.json`: 1<br>`index.js`: 235<br>`index.js`: 479<br>`views/fragmente/galerie.ejs`: 1<br>`views/pagini/galerie.ejs`: 1<br>`views/pagini/index.ejs`: 359<br>`resurse/scss/galerie.scss`: 1 | Datele sunt în JSON și validate la pornire; există rută dedicată `/galerie` cu filtrare pe interval orar, plus fragment reutilizabil în homepage. Randarea folosește `<picture>` cu versiuni `_sm/_md` generate automat. |
+| **Compilare automată SCSS** | `index.js`: 9<br>`lib/scss-compiler.js`: 45<br>`lib/scss-compiler.js`: 25<br>`index.js`: 433<br>`lib/scss-compiler.js`: 96 | Definire foldere globale SCSS/CSS, funcția `compileazaScss`, backup pentru CSS, compilare inițială și watcher pentru modificări. |
+| **Customizare Bootstrap** | `resurse/scss/custom.scss`: 1<br>`views/fragmente/head.ejs`: 14<br>`views/pagini/index.ejs`: 61 | Variabile Bootstrap custom + import SCSS, includere `custom.css` înainte de CSS-ul site-ului, componente Bootstrap vizibile (alert, butoane, badge). |
+| **Corectare Bootstrap** | `resurse/scss/overrides.scss`: 1 | Reguli de override pentru elemente afectate de Bootstrap (nav, liste, link-uri, imagini). |
+| **Efecte CSS (0.25p)** | `resurse/scss/effects.scss`: 1<br>`views/pagini/index.ejs`: 45<br>`views/pagini/despre.ejs`: 19 | Implementate: `::selection` custom, `hr` cu gradient repetitiv, text animat tip marquee, `column-count` pentru anunțuri, background fix cu schimbare de imagine pe `#prezentare`. |
+
+### Bonusuri (Etapa 5)
+
+| Bonus | Fișier și Linii | Status |
+| :--- | :--- | :--- |
+| **Bonus 1 — Galerie animată** | `index.js`: 509<br>`views/pagini/galerie-animata.ejs`: 1 | Rută `/galerie-animata`, selectare 9/12/15 imagini, generare SCSS dinamic și pauză la hover. |
+| **Bonus 3 — Backup cu timestamp** | `lib/scss-compiler.js`: 25 | Backup-ul CSS include timestamp pentru versiuni multiple. |
+| **Bonus 4 — Fișiere SCSS cu puncte în nume** | `lib/scss-compiler.js`: 17 | Implementat prin `path.parse(...).name` la generarea numelui CSS. |
+| **Bonus 5 — Validare JSON galerie** | `index.js`: 235 | Implementat: verifică existența folderului `cale_galerie` și a fișierelor listate. |
+
+---
 *Proiect realizat de: **Flintasu Bogdan Ionut***

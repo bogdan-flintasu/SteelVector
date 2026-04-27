@@ -1,13 +1,20 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+const sharp = require("sharp");
+const { compileazaScss, compileazaToateScss, urmaresteScss } = require("./lib/scss-compiler");
 
 const app = express();
+
+global.appRoot = __dirname;
+global.folderScss = path.join(__dirname, "resurse", "scss");
+global.folderCss = path.join(__dirname, "resurse", "css");
 
 // nr_task 11
 // Obiect global in care tinem erorile incarcate din JSON.
 const obGlobal = {
-    obErori: null
+    obErori: null,
+    obGalerie: null
 };
 
 // nr_task 2
@@ -34,6 +41,12 @@ for (const numeFolder of vect_foldere) {
         fs.mkdirSync(caleFolder, { recursive: true });
     }
 }
+
+[global.folderScss, global.folderCss].forEach((caleFolder) => {
+    if (!fs.existsSync(caleFolder)) {
+        fs.mkdirSync(caleFolder, { recursive: true });
+    }
+});
 
 // nr_task 17
 // Facem IP-ul disponibil in template-uri prin locals.
@@ -219,6 +232,177 @@ function initErori() {
     };
 }
 
+function verificaGalerieJSON() {
+    const caleGalerie = path.join(__dirname, "resurse", "json", "galerie.json");
+
+    if (!fs.existsSync(caleGalerie)) {
+        console.error(
+            `Lipseste fisierul ${caleGalerie}. ` +
+            "Creeaza fisierul galerie.json in resurse/json si reporneste serverul."
+        );
+        return;
+    }
+
+    let obGalerieParsed;
+    try {
+        obGalerieParsed = JSON.parse(fs.readFileSync(caleGalerie, "utf-8"));
+    } catch (err) {
+        console.error(
+            `galerie.json nu este JSON valid. ` +
+            `Detaliu parser: ${err.message}`
+        );
+        return;
+    }
+
+    const caleRelativa = String(obGalerieParsed.cale_galerie || "").replace(/^[/\\]+/, "");
+    const folderGalerie = path.join(__dirname, caleRelativa);
+
+    if (!obGalerieParsed.cale_galerie || !fs.existsSync(folderGalerie) || !fs.statSync(folderGalerie).isDirectory()) {
+        console.error(
+            `Folderul din "cale_galerie" nu exista pe disc: ${folderGalerie}`
+        );
+    }
+
+    if (!Array.isArray(obGalerieParsed.imagini)) {
+        console.error("Proprietatea imagini trebuie sa fie vector in galerie.json.");
+        return;
+    }
+
+    obGalerieParsed.imagini.forEach((img, index) => {
+        const fisier = img && img.fisier;
+        if (!fisier) {
+            console.error(`Lipseste numele fisierului pentru imaginea #${index + 1}.`);
+            return;
+        }
+
+        const caleFisier = path.join(folderGalerie, fisier);
+        if (!fs.existsSync(caleFisier) || !fs.statSync(caleFisier).isFile()) {
+            console.error(`Fisierul imagine nu exista: ${caleFisier}`);
+        }
+    });
+}
+
+function initGalerie() {
+    const caleGalerie = path.join(__dirname, "resurse", "json", "galerie.json");
+    if (!fs.existsSync(caleGalerie)) {
+        return;
+    }
+
+    const obGalerie = JSON.parse(fs.readFileSync(caleGalerie, "utf-8"));
+    const caleGalerieURL = "/" + String(obGalerie.cale_galerie || "")
+        .replace(/^[/\\]+/, "")
+        .replace(/\\/g, "/");
+
+    obGlobal.obGalerie = {
+        cale_galerie: caleGalerieURL,
+        imagini: obGalerie.imagini || []
+    };
+
+    const caleGalerieDisc = path.join(__dirname, obGalerie.cale_galerie || "resurse/imagini/galerie");
+    pregatesteGalerie(obGlobal.obGalerie.imagini, caleGalerieDisc);
+}
+
+function determinaTimpCurent() {
+    const ora = new Date().getHours();
+    if (ora >= 5 && ora < 12) {
+        return "dimineata";
+    }
+    if (ora >= 12 && ora < 20) {
+        return "zi";
+    }
+    return "noapte";
+}
+
+async function genereazaVersiuniImagine(caleOriginala) {
+    const parsed = path.parse(caleOriginala);
+    const caleSm = path.join(parsed.dir, `${parsed.name}_sm${parsed.ext}`);
+    const caleMd = path.join(parsed.dir, `${parsed.name}_md${parsed.ext}`);
+
+    try {
+        if (!fs.existsSync(caleSm)) {
+            await sharp(caleOriginala).resize({ width: 150 }).toFile(caleSm);
+        }
+        if (!fs.existsSync(caleMd)) {
+            await sharp(caleOriginala).resize({ width: 250 }).toFile(caleMd);
+        }
+    } catch (err) {
+        console.error(`Eroare la generarea versiunilor pentru ${caleOriginala}: ${err.message}`);
+    }
+}
+
+async function pregatesteGalerie(imagini, caleGalerieDisc) {
+    for (const img of imagini) {
+        if (!img || !img.fisier) {
+            continue;
+        }
+        const caleOriginala = path.join(caleGalerieDisc, img.fisier);
+        if (fs.existsSync(caleOriginala)) {
+            await genereazaVersiuniImagine(caleOriginala);
+        }
+    }
+}
+
+function genereazaScssGalerieAnimata(n) {
+    const nrRanduri = Math.ceil(n / 3);
+    const durata = Math.max(n * 1.5, 12);
+    const keyframes = [];
+
+    for (let i = 0; i < n; i += 1) {
+        const progres = (i / Math.max(n - 1, 1)) * 100;
+        const rand = Math.floor(i / 3);
+        const col = i % 3;
+        const rot = i % 2 === 0 ? 0 : 360;
+        keyframes.push(`${progres.toFixed(1)}% { transform: translate(-${col * 100}%, -${rand * 100}%) rotate(${rot}deg); }`);
+    }
+
+    const scssContent = `
+.galerie-animata-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.galerie-animata-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(${nrRanduri}, 1fr);
+  width: calc(3 * 280px);
+  height: 280px;
+  overflow: hidden;
+  border-width: 8px;
+  border-style: solid;
+  border-image: url('/resurse/imagini/galerie/SteelVector-prezentare.png') 30 round;
+}
+
+.galerie-animata-inner {
+  display: contents;
+  animation: slideGalerie ${durata}s linear infinite alternate;
+}
+
+.galerie-animata-grid:hover .galerie-animata-inner {
+  animation-play-state: paused;
+}
+
+.galerie-animata-item img {
+  width: 280px;
+  height: 280px;
+  object-fit: cover;
+}
+
+@keyframes slideGalerie {
+  ${keyframes.join("\n  ")}
+}
+
+@media (max-width: 1099px) {
+  .galerie-animata-wrapper {
+    display: none;
+  }
+}
+`;
+
+    const caleScss = path.join(global.folderScss, "galerie-animata.scss");
+    fs.writeFileSync(caleScss, scssContent, "utf-8");
+}
+
 // nr_task 12
 // Afisam o eroare folosind date din JSON, dar argumentele au prioritate.
 function afisareEroare(res, identificator, titlu, text, imagine) {
@@ -248,6 +432,10 @@ function afisareEroare(res, identificator, titlu, text, imagine) {
 // Verificam JSON-ul bonus si apoi initializam erorile in memorie.
 verificaEroriJSON();
 initErori();
+verificaGalerieJSON();
+initGalerie();
+compileazaToateScss();
+urmaresteScss();
 
 // nr_task 19
 // Blocam cereri directe catre fisiere .ejs.
@@ -285,7 +473,64 @@ app.get("/favicon.ico", (req, res) => {
 // nr_task 8
 // Homepage accesibil pe /, /index si /home.
 app.get(["/", "/index", "/home"], (req, res) => {
-    res.render("pagini/index");
+    res.render("pagini/index", { galerie: obGlobal.obGalerie });
+});
+
+app.get("/galerie", async (req, res) => {
+    const caleGalerie = path.join(__dirname, "resurse", "json", "galerie.json");
+    if (!fs.existsSync(caleGalerie)) {
+        return afisareEroare(res, 404);
+    }
+
+    const obGalerie = JSON.parse(fs.readFileSync(caleGalerie, "utf-8"));
+    const timpCurent = determinaTimpCurent();
+    const imaginiFiltrate = (obGalerie.imagini || []).filter((img) => img.timp === timpCurent);
+
+    let imaginiFinale = imaginiFiltrate;
+    if (imaginiFinale.length >= 6) {
+        const multiplu = Math.floor(imaginiFinale.length / 3) * 3;
+        imaginiFinale = imaginiFinale.slice(0, Math.max(multiplu, 6));
+    }
+
+    const caleGalerieDisc = path.join(__dirname, obGalerie.cale_galerie || "resurse/imagini/galerie");
+    await pregatesteGalerie(imaginiFinale, caleGalerieDisc);
+
+    const caleGalerieURL = "/" + String(obGalerie.cale_galerie || "")
+        .replace(/^[/\\]+/, "")
+        .replace(/\\/g, "/");
+
+    return res.render("pagini/galerie", {
+        imagini: imaginiFinale,
+        caleGalerie: caleGalerieURL,
+        timpCurent
+    });
+});
+
+app.get("/galerie-animata", async (req, res) => {
+    const caleGalerie = path.join(__dirname, "resurse", "json", "galerie.json");
+    if (!fs.existsSync(caleGalerie)) {
+        return afisareEroare(res, 404);
+    }
+
+    const obGalerie = JSON.parse(fs.readFileSync(caleGalerie, "utf-8"));
+    const eligibile = (obGalerie.imagini || []).filter((img) => img["galerie-animata"] === true);
+
+    const optiuni = [9, 12, 15];
+    const n = optiuni[Math.floor(Math.random() * optiuni.length)];
+    const imagini = eligibile.slice(0, Math.min(n, eligibile.length));
+
+    genereazaScssGalerieAnimata(imagini.length);
+    compileazaScss("galerie-animata.scss");
+
+    const caleGalerieURL = "/" + String(obGalerie.cale_galerie || "")
+        .replace(/^[/\\]+/, "")
+        .replace(/\\/g, "/");
+
+    return res.render("pagini/galerie-animata", {
+        imagini,
+        caleGalerie: caleGalerieURL,
+        n: imagini.length
+    });
 });
 
 // nr_task 13

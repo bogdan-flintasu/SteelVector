@@ -1,0 +1,90 @@
+nav {
+  margin: 0;
+  padding: 0;
+  background-color: var(--culoare-highlight);
+  box-sizing: border-box;
+}
+
+nav ul.meniu,
+nav ul.meniu > li ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: var(--culoare-titlu);
+  text-decoration: none;
+}
+
+main {
+  background-color: transparent;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+details summary {
+  cursor: pointer;
+}
+
+img,
+video,
+iframe,
+embed {
+  max-width: 100%;
+  height: auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--culoare-titlu);
+  font-weight: 700;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+main a {
+  color: var(--culoare-contur);
+  text-decoration: none;
+}
+
+main a:visited {
+  color: var(--culoare-link-vizitat);
+}
+
+main ul {
+  list-style-type: square;
+  color: var(--culoare-titlu);
+}
+
+main ol {
+  list-style-type: decimal-leading-zero;
+}
+
+blockquote {
+  border-left: 4px solid var(--culoare-contur);
+}
+
+body {
+  font-family: "Saira", sans-serif;
+}
+
+.badge {
+  font-weight: 700;
+}
+
+figure {
+  margin: 0;
+}
+
+figure > img {
+  width: 100%;
+}
+
+hr:not(.metal) {
+  border-color: var(--culoare-contur);
+  opacity: 0.4;
+}

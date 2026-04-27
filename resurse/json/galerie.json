@@ -1,0 +1,90 @@
+{
+  "cale_galerie": "resurse/imagini/galerie",
+  "imagini": [
+    {
+      "fisier": "Depozit-produse-metalurgice.jpg",
+      "titlu": "Depozit produse metalurgice",
+      "descriere": "Depozit cu profile metalice",
+      "alt": "Depozit cu profile metalice",
+      "timp": "zi",
+      "galerie-animata": true,
+      "atribuire": {
+        "autor": "SteelVector",
+        "sursa": "https://example.com",
+        "licenta": "CC-BY 4.0"
+      }
+    },
+    {
+      "fisier": "SteelVector-prezentare.png",
+      "titlu": "SteelVector prezentare",
+      "descriere": "Panou de prezentare SteelVector",
+      "alt": "Panou de prezentare SteelVector",
+      "timp": "zi",
+      "galerie-animata": true
+    },
+    {
+      "fisier": "IPE300.png",
+      "titlu": "Profil metalic IPE 300",
+      "descriere": "Profil metalic IPE 300",
+      "alt": "Profil metalic IPE 300",
+      "timp": "dimineata",
+      "galerie-animata": true
+    },
+    {
+      "fisier": "teava100x100.png",
+      "titlu": "Teava patrata 100x100",
+      "descriere": "Teava patrata 100x100",
+      "alt": "Teava patrata 100x100",
+      "timp": "dimineata",
+      "galerie-animata": true
+    },
+    {
+      "fisier": "bara-rotunda.png",
+      "titlu": "Bara rotunda",
+      "descriere": "Bara rotunda din otel",
+      "alt": "Bara rotunda din otel",
+      "timp": "noapte",
+      "galerie-animata": true
+    },
+    {
+      "fisier": "Depozit-produse-metalurgice-mid.jpg",
+      "titlu": "Depozit metalurgic (mid)",
+      "descriere": "Depozit metalurgic",
+      "alt": "Depozit metalurgic",
+      "timp": "noapte",
+      "galerie-animata": true
+    },
+    {
+      "fisier": "Depozit-produse-metalurgice-200x200.jpg",
+      "titlu": "Depozit metalurgic (mic)",
+      "descriere": "Depozit metalurgic in format mic",
+      "alt": "Depozit metalurgic in format mic",
+      "timp": "dimineata",
+      "galerie-animata": true
+    },
+    {
+      "fisier": "L.png",
+      "titlu": "Profil L",
+      "descriere": "Profil structural L",
+      "alt": "Profil structural L",
+      "timp": "zi",
+      "galerie-animata": true
+    },
+    {
+      "fisier": "U.jpg",
+      "titlu": "Profil U",
+      "descriere": "Profil structural U",
+      "alt": "Profil structural U",
+      "timp": "noapte",
+      "galerie-animata": true
+    },
+    {
+      "fisier": "imagine-map.png",
+      "titlu": "Harta site",
+      "descriere": "Harta interactiva a site-ului",
+      "alt": "Harta interactiva a site-ului",
+      "timp": "zi",
+      "galerie-animata": true
+    }
+  ]
+}

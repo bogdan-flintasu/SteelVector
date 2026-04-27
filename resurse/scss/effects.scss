@@ -1,0 +1,327 @@
+// =============================================================
+//  effects.scss — Efecte CSS SteelVector
+//  Compilat automat prin compileazaScss()
+// =============================================================
+
+// ── (0.025) ::selection — schimbare afisare text selectat ─────
+::selection {
+  background-color: var(--culoare-contur);
+  color: var(--culoare-highlight);
+  text-shadow: none;
+  letter-spacing: 0.05em;
+}
+
+// ── (0.1) Stilizare hr — cerinta individuala ──────────────────
+hr.metal {
+  border: 0;
+  height: 0.6rem;
+  border-radius: 999px;
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--culoare-contur) 0,
+    var(--culoare-contur) 12px,
+    #0d2235 12px,
+    #0d2235 24px
+  );
+  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.45) inset;
+  margin: 1.2rem 0 1.5rem;
+}
+
+// ── (0.025) column-count — text pe coloane ────────────────────
+#anunturi ul {
+  column-count: 2;
+  column-gap: 2rem;
+  column-rule: 2px solid var(--culoare-contur);
+}
+
+@media screen and (max-width: 1200px) {
+  #anunturi ul {
+    column-count: 1;
+  }
+}
+
+// ── (0.05) Marquee — text care se plimba orizontal ────────────
+.marquee {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid var(--culoare-contur);
+  border-radius: 0.4rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.6rem 0;
+  // Prevent horizontal scrollbar
+  max-width: 100%;
+}
+
+.marquee__track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 14s linear infinite;
+  color: var(--culoare-titlu);
+  padding: 0 0.8rem;
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
+}
+
+// ── (0.05) Background fix la scroll cu animatie ───────────────
+#prezentare {
+  background-color: rgba(0, 0, 0, 0.55);
+  background-blend-mode: multiply;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  animation: background-swap 18s infinite;
+}
+
+@keyframes background-swap {
+  0%,  33% { background-image: url("/resurse/imagini/galerie/Depozit-produse-metalurgice.jpg"); }
+  34%, 66% { background-image: url("/resurse/imagini/galerie/SteelVector-prezentare.png"); }
+  67%,100% { background-image: url("/resurse/imagini/galerie/Depozit-produse-metalurgice-mid.jpg"); }
+}
+
+// ── (0.05) Tabel responsiv — minim 4 coloane, fara colspan ───
+// (folosit pe #tab-orar din index.ejs)
+// Wrapper: overflow-x pentru scroll orizontal pe ecrane mici
+.tabel-responsiv-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media screen and (max-width: 600px) {
+  // Ascundem headerul vizual, il reconstituim ca data-label pe fiecare celula
+  .tabel-transpus thead {
+    display: none;
+  }
+
+  .tabel-transpus tbody tr {
+    display: block;
+    margin-bottom: 1.2rem;
+    border: 2px solid var(--culoare-contur);
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .tabel-transpus tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: right;
+  }
+
+  .tabel-transpus tbody td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--culoare-contur);
+    text-align: left;
+    padding-right: 1rem;
+  }
+
+  .tabel-transpus tbody tr:last-child td:last-child {
+    border-bottom: 0;
+  }
+
+  // tfoot se afiseaza normal
+  .tabel-transpus tfoot td {
+    display: block;
+    text-align: center;
+    border-bottom: 0;
+    font-style: italic;
+  }
+
+  .tabel-transpus tfoot td::before {
+    content: none;
+  }
+}
+
+// ── (0.05) Duotone — efect cerinta individuala ────────────────
+// Aplica un efect duotone imaginilor cu clasa .duotone
+// Tehnica: mixblend-mode + gradient overlay cu culori brand
+
+.duotone-wrapper {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.duotone-wrapper img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%);
+  mix-blend-mode: luminosity;
+}
+
+.duotone-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 28, 39, 0.85) 0%,      // culoare-highlight (albastru inchis)
+    rgba(249, 155, 65, 0.75) 100%   // culoare-contur (portocaliu brand)
+  );
+  mix-blend-mode: color;
+  pointer-events: none;
+}
+
+// ── (0.15) Reflexie — cerinta individuala ─────────────────────
+// Aplica o reflexie imaginilor cu clasa .reflexie
+// Tehnica: ::after cu gradient care imita reflexia
+
+.reflexie-container {
+  display: inline-block;
+  position: relative;
+}
+
+.reflexie-container img {
+  display: block;
+  width: 100%;
+  border-radius: 0.5rem;
+}
+
+// Reflexia propriu-zisa: copie inversa + gradient de disparitie
+.reflexie-container::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 40%;
+  background: inherit;
+
+  // Cream reflexia cu -webkit-box-reflect (suportat larg)
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+// Metoda cross-browser cu -webkit-box-reflect
+.reflexie {
+  -webkit-box-reflect: below 4px linear-gradient(
+    transparent 0%,
+    transparent 50%,
+    rgba(249, 155, 65, 0.08) 70%,
+    rgba(249, 155, 65, 0.2) 100%
+  );
+  display: block;
+  border-radius: 0.5rem;
+  max-width: 100%;
+}
+
+// Fallback pentru browsere fara -webkit-box-reflect
+// (transform + gradient cu overflow: hidden pe parinte)
+.reflexie-fallback {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.reflexie-fallback img {
+  display: block;
+  border-radius: 0.5rem;
+}
+
+.reflexie-fallback .reflexie-imagine-inversata {
+  display: block;
+  width: 100%;
+  transform: scaleY(-1);
+  opacity: 0.25;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 70%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 70%);
+}
+
+// ── (0.05) Video ca background ────────────────────────────────
+// Sectiunea cu video-background conform css-tricks.com
+#video-bg-section {
+  position: relative;
+  min-height: 380px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+#video-bg-section video.video-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  object-fit: cover;
+  // Override general.css
+  max-width: none;
+  min-width: unset;
+}
+
+#video-bg-section .video-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 28, 39, 0.75) 0%,
+    rgba(249, 155, 65, 0.2) 100%
+  );
+  z-index: 1;
+}
+
+#video-bg-section .video-bg-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #f5f7f9;
+  padding: 2rem;
+
+  h2 {
+    font-size: 2.2rem;
+    margin-bottom: 0.75rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  }
+
+  p {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  }
+}
+
+// ── Galerie grid (grid-galerie din index.ejs) ─────────────────
+#grid-galerie .galerie-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin-top: 1rem;
+}
+
+#grid-galerie .galerie-item {
+  background-color: rgba(0, 0, 0, 0.25);
+  border: 2px solid var(--culoare-contur);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+#grid-galerie .galerie-item img {
+  border-radius: 0.35rem;
+  border: 2px solid rgba(0, 0, 0, 0.45);
+  display: block;
+}
+
+#grid-galerie .galerie-item figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--culoare-titlu);
+}

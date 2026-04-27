@@ -17,7 +17,7 @@
     <main>
         <div id="grid-pagina">
 
-            <section id="welcome">
+            <section id="welcome" id-prezentare="1">
                 <hgroup>
                     <h2>Bine ați venit pe SteelVector</h2>
                     <p class="subtitlu">Expertiză în oțel structural pentru hale</p>
@@ -42,6 +42,9 @@
                         Bare si Tije
                     </div>
                 </div>
+                <div class="marquee" aria-label="Anunt rulant">
+                    <span class="marquee__track">Livrari rapide in 24-48h pentru stocurile disponibile. Consulta oferta actualizata si solicita deviz personalizat.</span>
+                </div>
                 <p class="anunt intro">Comandați acum online unul din produsele noastre !</p>
                 <div id="dv-prezentare-1">
                     <div id="dv-prezentare">
@@ -55,6 +58,16 @@
                     </div>
                 </div>
                 <hr class="metal">
+                <div class="bootstrap-demo">
+                    <div class="alert alert-primary" role="alert" id="alert-catalog-index">
+                        Catalog nou disponibil pentru sezonul de primavara.
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" type="button" id="btn-oferta-index">Oferta premium</button>
+                        <button class="btn btn-outline-light" type="button" id="btn-detalii-index">Afla detalii</button>
+                        <span class="badge text-bg-warning" id="badge-index">Nou</span>
+                    </div>
+                </div>
                 <div id="container-video">
                     <a href="/resurse/imagini/galerie/SteelVector-prezentare.png" target="_self">
                         <img style="width:50%" class="farfurie" src="/resurse/imagini/galerie/SteelVector-prezentare.png"
@@ -200,7 +213,8 @@
             </section>
             <section id="orar">
                 <h2>Orar</h2>
-                <table id="tab-orar">
+                <div class="tabel-responsiv-wrapper">
+                <table id="tab-orar" class="tabel-transpus">
                     <caption>Programul de funcționare și livrări SteelVector</caption>
                     <thead>
 
@@ -208,62 +222,62 @@
                             <th>Cod</th>
                             <th>Regim</th>
                             <th>Zi</th>
-                            <th>Livrari </th>
-                            <th>Pauza</th>
-                            <th>Livrari </th>
+                            <th>Livrări (dimineața)</th>
+                            <th>Pauză</th>
+                            <th>Livrări (după-amiaza)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>SV01</td>
-                            <td rowspan="5">Zile<br>Lucrătoare</td>
-                            <td>Luni</td>
-                            <td>08-12</td>
-                            <td>12-14</td>
-                            <td>14-18</td>
+                            <td data-label="Cod">SV01</td>
+                            <td data-label="Regim" rowspan="5">Zile<br>Lucrătoare</td>
+                            <td data-label="Zi">Luni</td>
+                            <td data-label="Livrări dim.">08-12</td>
+                            <td data-label="Pauză">12-14</td>
+                            <td data-label="Livrări dup.">14-18</td>
                         </tr>
                         <tr>
-                            <td>SV02</td>
-                            <td>Marti</td>
-                            <td>08-12</td>
-                            <td>12-14</td>
-                            <td>14-18</td>
+                            <td data-label="Cod">SV02</td>
+                            <td data-label="Zi">Marti</td>
+                            <td data-label="Livrări dim.">08-12</td>
+                            <td data-label="Pauză">12-14</td>
+                            <td data-label="Livrări dup.">14-18</td>
                         </tr>
                         <tr>
-                            <td>SV03</td>
-                            <td>Miercuri</td>
-                            <td>08-12</td>
-                            <td>12-14</td>
-                            <td>14-18</td>
+                            <td data-label="Cod">SV03</td>
+                            <td data-label="Zi">Miercuri</td>
+                            <td data-label="Livrări dim.">08-12</td>
+                            <td data-label="Pauză">12-14</td>
+                            <td data-label="Livrări dup.">14-18</td>
                         </tr>
                         <tr>
-                            <td>SV04</td>
-                            <td>Joi</td>
-                            <td>08-12</td>
-                            <td>12-14</td>
-                            <td>14-18</td>
+                            <td data-label="Cod">SV04</td>
+                            <td data-label="Zi">Joi</td>
+                            <td data-label="Livrări dim.">08-12</td>
+                            <td data-label="Pauză">12-14</td>
+                            <td data-label="Livrări dup.">14-18</td>
                         </tr>
                         <tr>
-                            <td>SV05</td>
-                            <td>Vineri</td>
-                            <td>08-12</td>
-                            <td>12-14</td>
-                            <td>14-17</td>
+                            <td data-label="Cod">SV05</td>
+                            <td data-label="Zi">Vineri</td>
+                            <td data-label="Livrări dim.">08-12</td>
+                            <td data-label="Pauză">12-14</td>
+                            <td data-label="Livrări dup.">14-17</td>
                         </tr>
                         <tr>
-                            <td>SV-W1</td>
-                            <td rowspan="2">Weekend</td>
-                            <td>Sambata</td>
-                            <td>09-12</td>
-                            <td>12-13</td>
-                            <td>13-15</td>
+                            <td data-label="Cod">SV-W1</td>
+                            <td data-label="Regim" rowspan="2">Weekend</td>
+                            <td data-label="Zi">Sambata</td>
+                            <td data-label="Livrări dim.">09-12</td>
+                            <td data-label="Pauză">12-13</td>
+                            <td data-label="Livrări dup.">13-15</td>
                         </tr>
                         <tr>
-                            <td>SV-W2</td>
-                            <td>Duminica</td>
-                            <td>Închis</td>
-                            <td>-</td>
-                            <td>Închis</td>
+                            <td data-label="Cod">SV-W2</td>
+                            <td data-label="Zi">Duminica</td>
+                            <td data-label="Livrări dim.">Închis</td>
+                            <td data-label="Pauză">-</td>
+                            <td data-label="Livrări dup.">Închis</td>
                         </tr>
                     </tbody>
                     <tfoot>
@@ -272,6 +286,7 @@
                         </tr>
                     </tfoot>
                 </table>
+                </div><!-- /.tabel-responsiv-wrapper -->
                 <p><strong>Atentie!!!</strong> In prima zi a lunii efectuam inventarul stocului</p>
             </section>
             <figure id="fig1" class="fg-img">
@@ -345,6 +360,20 @@
 
         <section id="galerie-statica">
             <h2>Galerie Proiecte</h2>
+
+            <!-- Video Background Section -->
+            <div id="video-bg-section">
+                <video class="video-bg" playsinline autoplay loop muted preload="auto">
+                    <source src="/resurse/video/structura.webm" type="video/webm">
+                    <source src="/resurse/video/structura.mp4" type="video/mp4">
+                </video>
+                <div class="video-bg-overlay"></div>
+                <div class="video-bg-content">
+                    <h2>SteelVector — Structuri Metalice</h2>
+                    <p>Calitate, rezistență și profesionalism pentru proiectele dumneavoastră industriale.</p>
+                </div>
+            </div>
+
             <div id="grid-galerie">
                 <section id="harta-site">
                     <h2>Harta Interactivă a Site-ului</h2>
@@ -368,6 +397,9 @@
                         <figcaption>Click pe panouri (Produse, Promoții, Orar) pentru navigare.</figcaption>
                     </figure>
                 </section>
+                <% if (galerie && Array.isArray(galerie.imagini)) { %>
+                    <%- include('../fragmente/galerie', { imagini: galerie.imagini, caleGalerie: galerie.cale_galerie }) %>
+                <% } %>
             </div>
         </section>
         <section id="ghid">

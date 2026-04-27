@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+  <title>Galerie Statică — SteelVector</title>
+  <meta name="description"
+    content="Galerie de imagini cu produsele si proiectele SteelVector: profile metalice, tevi structurale, bare si tije.">
+  <meta name="keywords"
+    content="galerie, imagini, profile metalice, IPE, HEA, HEB, bare, tevi, otel, SteelVector">
+  <%- include('../fragmente/head') %>
+</head>
+
+<body class="saira">
+  <%- include('../fragmente/header') %>
+
+  <main>
+    <section id="galerie-statica-pagina" style="padding: 1.5rem 1rem;">
+
+      <h2>Galerie Statică</h2>
+      <p>
+        Imagine din galeria filtrată pentru intervalul:
+        <strong style="color: var(--culoare-contur);"><%= timpCurent %></strong>
+      </p>
+
+      <hr class="metal">
+
+      <%- include('../fragmente/galerie', { imagini, caleGalerie }) %>
+
+      <% if (imagini.length === 0) { %>
+        <p style="color: var(--culoare-titlu); text-align: center; margin-top: 2rem;">
+          Nu există imagini disponibile pentru intervalul <strong><%= timpCurent %></strong>.
+          Încercați mai târziu sau accesați galeria completă.
+        </p>
+      <% } %>
+
+      <hr class="metal">
+
+      <!--  Sectiune cu efect Duotone  -->
+      <section id="sectiune-duotone" style="margin-top: 2rem;">
+        <h2>Efect Duotone</h2>
+        <p>Imaginile de mai jos demonstrează efectul <em>duotone</em> folosind culorile brandului SteelVector.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+          <div class="duotone-wrapper">
+            <img src="/resurse/imagini/galerie/Depozit-produse-metalurgice.jpg"
+                 alt="Depozit metalurgic — duotone" loading="lazy">
+          </div>
+          <div class="duotone-wrapper">
+            <img src="/resurse/imagini/galerie/IPE300.png"
+                 alt="Profil IPE 300 — duotone" loading="lazy">
+          </div>
+          <div class="duotone-wrapper">
+            <img src="/resurse/imagini/galerie/teava100x100.png"
+                 alt="Teava 100x100 — duotone" loading="lazy">
+          </div>
+        </div>
+      </section>
+
+      <hr class="metal">
+
+      <!--  Sectiune cu efect Reflexie  -->
+      <section id="sectiune-reflexie" style="margin-top: 2rem;">
+        <h2>Efect Reflexie</h2>
+        <p>Imaginile de mai jos demonstrează efectul de <em>reflexie</em> obținut cu <code>-webkit-box-reflect</code>.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin-top: 1rem; align-items: end;">
+          <div>
+            <img class="reflexie"
+                 src="/resurse/imagini/galerie/bara-rotunda.png"
+                 alt="Bara rotunda — reflexie" loading="lazy"
+                 style="max-height: 280px; width: auto; margin: 0 auto;">
+          </div>
+          <div>
+            <img class="reflexie"
+                 src="/resurse/imagini/galerie/L.png"
+                 alt="Profil L — reflexie" loading="lazy"
+                 style="max-height: 280px; width: auto; margin: 0 auto;">
+          </div>
+          <div>
+            <img class="reflexie"
+                 src="/resurse/imagini/galerie/U.jpg"
+                 alt="Profil U — reflexie" loading="lazy"
+                 style="max-height: 280px; width: auto; margin: 0 auto;">
+          </div>
+        </div>
+      </section>
+
+      <hr class="metal">
+
+      <!--  Sectiune Bootstrap demo cu teme  -->
+      <section id="bootstrap-demo-galerie" style="margin-top: 2rem;">
+        <h2>Elemente Bootstrap — Schema Cromatică SteelVector</h2>
+        <p>Demonstrare a temei personalizate Bootstrap (tema dark — implicit și tema light).</p>
+
+        <!--  Tema Dark (implicit)  -->
+        <h3 style="margin-top: 1.5rem;">Tema 1: Steel Dark (dark mode industrial)</h3>
+        <div class="bootstrap-demo">
+          <div>
+            <button class="btn btn-primary" type="button" id="btn-oferta-galerie">Ofertă Premium</button>
+            <button class="btn btn-outline-light" type="button" id="btn-detalii-galerie">Aflați detalii</button>
+            <button class="btn btn-success" type="button" id="btn-comanda-galerie">Comandați acum</button>
+            <span class="badge text-bg-warning" id="badge-nou-galerie">Nou</span>
+          </div>
+          <div class="alert alert-primary" role="alert" id="alert-catalog-galerie">
+            <strong>Catalog actualizat!</strong> Verificați noile profile disponibile pentru sezonul 2026.
+          </div>
+          <div class="card card-sv" style="max-width: 320px;" id="card-sv-galerie">
+            <div class="card-header">SteelVector — Profile IPE</div>
+            <div class="card-body">
+              <p class="card-text">Grinzi IPE certificate conform normelor europene, disponibile în stoc imediat.</p>
+              <a href="#" class="btn btn-primary btn-sm">Vezi oferta</a>
+            </div>
+          </div>
+        </div>
+
+        <!--  Tema Light  -->
+        <h3 style="margin-top: 2rem;">Tema 2: Steel Light (mod deschis)</h3>
+        <div class="tema-light" style="padding: 1.5rem; border-radius: 0.65rem; border: 2px solid #f99b41;">
+          <div class="bootstrap-demo">
+            <div>
+              <button class="btn btn-primary" type="button" id="btn-oferta-light">Ofertă Premium</button>
+              <button class="btn btn-secondary" type="button" id="btn-detalii-light">Aflați detalii</button>
+              <span class="badge" style="background-color:#f99b41; color:#fff;" id="badge-light">Disponibil</span>
+            </div>
+            <div class="alert alert-primary" role="alert" id="alert-light">
+              <strong>Reduceri de primăvară!</strong> Profiluri HEB cu 15% reducere la comandă.
+            </div>
+            <div class="card" style="max-width: 320px;" id="card-light">
+              <div class="card-header" style="background-color: #f99b41; color: #fff;">SteelVector — Tevi Structurale</div>
+              <div class="card-body">
+                <p class="card-text" style="color: #1c2b39;">Țevi rotunde și pătrate pentru cadre industriale.</p>
+                <a href="#" class="btn btn-primary btn-sm">Solicită deviz</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </section>
+  </main>
+
+  <%- include('../fragmente/footer') %>
+</body>
+
+</html>

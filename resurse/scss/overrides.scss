@@ -1,0 +1,127 @@
+// =============================================================
+//  overrides.scss — Corectare interferente Bootstrap
+//  Acest fisier se importa DUPA Bootstrap pentru a suprascrie
+//  stilurile Bootstrap care afecteaza aspectul original al site-ului.
+// =============================================================
+
+// ── Nav: resetam stilizarea Bootstrap pe nav-ul custom ────────
+nav {
+  margin: 0;
+  padding: 0;
+  background-color: var(--culoare-highlight);
+  // Bootstrap poate seta padding si box-model diferite
+  box-sizing: border-box;
+}
+
+nav ul.meniu,
+nav ul.meniu > li ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: var(--culoare-titlu);
+  text-decoration: none;
+}
+
+// ── Main: fundalul trebuie sa ramana transparent ──────────────
+main {
+  background-color: transparent;
+}
+
+// ── Tabele: Bootstrap reseteaza border-collapse ───────────────
+table {
+  border-collapse: collapse;
+}
+
+// ── Details/Summary: cursor pointer ──────────────────────────
+details summary {
+  cursor: pointer;
+}
+
+// ── Media (img, video, iframe): resetam limitarile Bootstrap ──
+// Bootstrap seteaza max-width:100% pe img, dar noi avem reguli
+// proprii cu min-width in general.css — pastram comportamentul nostru
+img,
+video,
+iframe,
+embed {
+  max-width: 100%;
+  height: auto;
+}
+
+// ── Headings: Bootstrap le recoloreaza, noi folosim custom ────
+h1, h2, h3, h4, h5, h6 {
+  color: var(--culoare-titlu);
+  font-weight: 700;
+}
+
+// ── Paragrafe: Bootstrap seteaza margin-bottom deja, dar noi ─
+// avem 1rem in general.css — asiguram consistenta
+p {
+  margin-bottom: 1rem;
+}
+
+// ── Linkuri din main: Bootstrap seteaza color pe `a` ─────────
+// Pastram stilizarea custom a linkurilor din continut
+main a {
+  color: var(--culoare-contur);
+  text-decoration: none;
+}
+
+main a:visited {
+  color: var(--culoare-link-vizitat);
+}
+
+// ── Bootstrap reseteaza list-style la nav ul ─────────────────
+// Ne asiguram ca ul/ol din main isi pastreaza stilul
+main ul {
+  list-style-type: square;
+  color: var(--culoare-titlu);
+}
+
+main ol {
+  list-style-type: decimal-leading-zero;
+}
+
+// ── Blockquote: Bootstrap stilizeaza diferit ──────────────────
+// Pastram stilizarea din general.css
+blockquote {
+  border-left: 4px solid var(--culoare-contur);
+}
+
+// ── Body: Bootstrap seteaza font-family si font-size ─────────
+// Suprascriem cu fontul nostru (definit deja in custom.scss prin
+// $font-family-sans-serif, dar redundanta nu strica)
+body {
+  font-family: "Saira", sans-serif;
+}
+
+// ── Bootstrap modifica .btn sa foloseasca border-radius custom─
+// OK, folosim deja $border-radius in custom.scss
+
+// ── Badge: Bootstrap 5 foloseste display:inline-flex ─────────
+// Nu interfereaza, dar pastram culoarea textului
+.badge {
+  font-weight: 700;
+}
+
+// ── Alert: Bootstrap seteaza padding/border-radius ───────────
+// Culorile sunt custom prin $theme-colors, ok
+
+// ── Figura: Bootstrap nu reseteaza margin pe figure ──────────
+figure {
+  margin: 0;
+}
+
+figure > img {
+  width: 100%;
+}
+
+// ── Hr: Bootstrap seteaza opacity pe hr ──────────────────────
+// hr.metal are stilizare proprie; generic hr poate ramane
+hr:not(.metal) {
+  border-color: var(--culoare-contur);
+  opacity: 0.4;
+}
