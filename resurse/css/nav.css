@@ -221,9 +221,27 @@ nav ul.meniu > li:hover ul {
     height: auto;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     -webkit-tap-highlight-color: transparent;
+    /* show same inset grow animation as on large screens */
   }
   nav ul.meniu > li::before {
-    display: none;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(249, 155, 65, 0.15);
+    transform: scale(0);
+    transform-origin: center center;
+    transition: transform 0.4s ease-in-out;
+    z-index: 0;
+    pointer-events: none;
+  }
+  nav ul.meniu > li {
+    /* trigger same effect on hover/active/focus for touch and keyboard */
+  }
+  nav ul.meniu > li:hover::before, nav ul.meniu > li:active::before, nav ul.meniu > li:focus-within::before {
+    transform: scale(1);
   }
   nav ul.meniu > li .optiune-principala {
     padding: 15px 0;

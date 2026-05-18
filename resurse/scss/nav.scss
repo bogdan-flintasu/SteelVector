@@ -1,4 +1,4 @@
-   $nav-height: 60px;
+$nav-height: 60px;
    $transition-speed: 0.4s;
    $submenu-bg: #15222e;
 
@@ -231,7 +231,28 @@
                 border-bottom: 1px solid rgba(255, 255, 255, 0.05);
                 -webkit-tap-highlight-color: transparent;
 
-                &::before { display: none; }
+                /* show same inset grow animation as on large screens */
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(249, 155, 65, 0.15);
+                    transform: scale(0);
+                    transform-origin: center center;
+                    transition: transform $transition-speed ease-in-out;
+                    z-index: 0;
+                    pointer-events: none;
+                }
+
+                /* trigger same effect on hover/active/focus for touch and keyboard */
+                &:hover::before,
+                &:active::before,
+                &:focus-within::before {
+                    transform: scale(1);
+                }
 
                 .optiune-principala {
                     padding: 15px 0;
