@@ -2,12 +2,13 @@
 <html lang="ro">
 
 <head>
-    <title>SteelVector</title>
+    <title>SteelVector — Despre și Galerie</title>
     <meta name="description"
         content="SteelVector vinde structuri metalice solide pentru hale industriale cu profile IPE, HEA si HEB.">
     <meta name="keywords"
         content="metale, structuri metalice, IPE, hala, HEA, HEB, profile, bare, tije, hala, grinzi, otel, construcții, depozit">
     <%- include('../fragmente/head') %>
+    <link rel="stylesheet" href="/resurse/css/galerie-animata.css" type="text/css">
 </head>
 
 
@@ -34,9 +35,123 @@
         </section>
 
         <section id="galerie" style="padding:1.5rem 1rem;">
-            <h2>Galerie</h2>
-            <img src="/resurse/imagini/galerie/SteelVector-prezentare.png" alt="Depozit SteelVector"
-                style="max-width:min(95vw, 700px); height:auto; border-radius:12px;">
+            <h2>Galerie Proiecte</h2>
+            
+            <% if (locals.staticGalerie) { %>
+                <h3 style="margin-top: 1rem; color: var(--culoare-titlu);">Galerie Statică</h3>
+                <p>
+                    Imagine din galeria filtrată pentru intervalul:
+                    <strong style="color: var(--culoare-contur);"><%= staticGalerie.timpCurent %></strong>
+                </p>
+                <%- include('../fragmente/galerie', { imagini: staticGalerie.imagini, caleGalerie: staticGalerie.caleGalerie }) %>
+                <% if (staticGalerie.imagini.length === 0) { %>
+                    <p style="color: var(--culoare-titlu); text-align: center; margin-top: 1rem;">
+                        Nu există imagini disponibile pentru intervalul <strong><%= staticGalerie.timpCurent %></strong>.
+                    </p>
+                <% } %>
+            <% } %>
+
+            <hr class="metal">
+
+            <% if (locals.dynamicGalerie) { %>
+                <h3 style="margin-top: 2rem; color: var(--culoare-titlu);">Galerie Animată</h3>
+                <p>Set curent: <strong><%= dynamicGalerie.n %></strong> imagini distincte</p>
+                <div class="galerie-animata-wrapper">
+                    <div class="galerie-animata-grid">
+                        <div class="galerie-animata-inner">
+                            <% dynamicGalerie.imagini.forEach((img) => { %>
+                                <div class="galerie-animata-item">
+                                    <img src="<%= dynamicGalerie.caleGalerie %>/<%= img.cale_relativa || img.fisier %>" alt="<%= img.alt || img.nume || img.titlu || "" %>">
+                                </div>
+                            <% }) %>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+
+            <hr class="metal">
+
+            <!--  Sectiune cu efect Duotone  -->
+            <section id="sectiune-duotone" style="margin-top: 2rem;">
+              <h2>Efect Duotone</h2>
+              <p>Imaginile de mai jos demonstrează efectul <em>duotone</em> folosind culorile brandului SteelVector.</p>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                <div class="duotone-wrapper">
+                  <img src="/resurse/imagini/galerie/Depozit-produse-metalurgice.jpg"
+                       alt="Depozit metalurgic — duotone" loading="lazy">
+                </div>
+                <div class="duotone-wrapper">
+                  <img src="/resurse/imagini/galerie/IPE300.png"
+                       alt="Profil IPE 300 — duotone" loading="lazy">
+                </div>
+                <div class="duotone-wrapper">
+                  <img src="/resurse/imagini/galerie/teava100x100.png"
+                       alt="Teava 100x100 — duotone" loading="lazy">
+                </div>
+              </div>
+            </section>
+
+            <hr class="metal">
+
+            <!--  Sectiune cu efect Reflexie  -->
+            <section id="sectiune-reflexie" style="margin-top: 2rem; padding-bottom: 2rem;">
+              <h2>Efect Reflexie Text</h2>
+              <p>Headingul de mai jos demonstrează efectul de <em>reflexie text</em> (este blurat, iar la hover se alungește și devine mai clar):</p>
+              <div style="text-align: center; margin-top: 3rem; margin-bottom: 3.5rem;">
+                <h1 class="reflexie-text" data-text="SteelVector">SteelVector</h1>
+              </div>
+            </section>
+
+            <hr class="metal">
+
+            <!--  Sectiune Bootstrap demo cu teme  -->
+            <section id="bootstrap-demo-galerie" style="margin-top: 2rem;">
+              <h2>Elemente Bootstrap — Schema Cromatică SteelVector</h2>
+              <p>Demonstrare a temei personalizate Bootstrap (tema dark — implicit și tema light).</p>
+
+              <!--  Tema Dark (implicit)  -->
+              <h3 style="margin-top: 1.5rem;">Tema 1: Steel Dark (dark mode industrial)</h3>
+              <div class="bootstrap-demo">
+                <div>
+                  <button class="btn btn-primary" type="button" id="btn-oferta-galerie">Ofertă Premium</button>
+                  <button class="btn btn-outline-light" type="button" id="btn-detalii-galerie">Aflați detalii</button>
+                  <button class="btn btn-success" type="button" id="btn-comanda-galerie">Comandați acum</button>
+                  <span class="badge text-bg-warning" id="badge-nou-galerie">Nou</span>
+                </div>
+                <div class="alert alert-primary" role="alert" id="alert-catalog-galerie">
+                  <strong>Catalog actualizat!</strong> Verificați noile profile disponibile pentru sezonul 2026.
+                </div>
+                <div class="card card-sv" style="max-width: 320px;" id="card-sv-galerie">
+                  <div class="card-header">SteelVector — Profile IPE</div>
+                  <div class="card-body">
+                    <p class="card-text">Grinzi IPE certificate conform normelor europene, disponibile în stoc imediat.</p>
+                    <a href="#" class="btn btn-primary btn-sm">Vezi oferta</a>
+                  </div>
+                </div>
+              </div>
+
+              <!--  Tema Light  -->
+              <h3 style="margin-top: 2rem;">Tema 2: Steel Light (mod deschis)</h3>
+              <div class="tema-light" style="padding: 1.5rem; border-radius: 0.65rem; border: 2px solid #f99b41;">
+                <div class="bootstrap-demo">
+                  <div>
+                    <button class="btn btn-primary" type="button" id="btn-oferta-light">Ofertă Premium</button>
+                    <button class="btn btn-secondary" type="button" id="btn-detalii-light">Aflați detalii</button>
+                    <span class="badge" style="background-color:#f99b41; color:#fff;" id="badge-light">Disponibil</span>
+                  </div>
+                  <div class="alert alert-primary" role="alert" id="alert-light">
+                    <strong>Reduceri de primăvară!</strong> Profiluri HEB cu 15% reducere la comandă.
+                  </div>
+                  <div class="card" style="max-width: 320px;" id="card-light">
+                    <div class="card-header" style="background-color: #f99b41; color: #fff;">SteelVector — Tevi Structurale</div>
+                    <div class="card-body">
+                      <p class="card-text" style="color: #1c2b39;">Țevi rotunde și pătrate pentru cadre industriale.</p>
+                      <a href="#" class="btn btn-primary btn-sm">Solicită deviz</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
         </section>
     </main>
 

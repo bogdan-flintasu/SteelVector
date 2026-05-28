@@ -2,8 +2,8 @@
   "cale_galerie": "resurse/imagini/galerie",
   "imagini": [
     {
-      "fisier": "Depozit-produse-metalurgice.jpg",
-      "titlu": "Depozit produse metalurgice",
+      "cale_relativa": "Depozit-produse-metalurgice.jpg",
+      "nume": "Depozit produse metalurgice",
       "descriere": "Depozit cu profile metalice",
       "alt": "Depozit cu profile metalice",
       "timp": "zi",
@@ -15,75 +15,115 @@
       }
     },
     {
-      "fisier": "SteelVector-prezentare.png",
-      "titlu": "SteelVector prezentare",
+      "cale_relativa": "SteelVector-prezentare.png",
+      "nume": "SteelVector prezentare",
       "descriere": "Panou de prezentare SteelVector",
       "alt": "Panou de prezentare SteelVector",
       "timp": "zi",
       "galerie-animata": true
     },
     {
-      "fisier": "IPE300.png",
-      "titlu": "Profil metalic IPE 300",
+      "cale_relativa": "IPE300.png",
+      "nume": "Profil metalic IPE 300",
       "descriere": "Profil metalic IPE 300",
       "alt": "Profil metalic IPE 300",
       "timp": "dimineata",
       "galerie-animata": true
     },
     {
-      "fisier": "teava100x100.png",
-      "titlu": "Teava patrata 100x100",
+      "cale_relativa": "teava100x100.png",
+      "nume": "Teava patrata 100x100",
       "descriere": "Teava patrata 100x100",
       "alt": "Teava patrata 100x100",
       "timp": "dimineata",
       "galerie-animata": true
     },
     {
-      "fisier": "bara-rotunda.png",
-      "titlu": "Bara rotunda",
+      "cale_relativa": "bara-rotunda.png",
+      "nume": "Bara rotunda",
       "descriere": "Bara rotunda din otel",
       "alt": "Bara rotunda din otel",
       "timp": "noapte",
       "galerie-animata": true
     },
     {
-      "fisier": "Depozit-produse-metalurgice-mid.jpg",
-      "titlu": "Depozit metalurgic (mid)",
+      "cale_relativa": "Depozit-produse-metalurgice-mid.jpg",
+      "nume": "Depozit metalurgic (mid)",
       "descriere": "Depozit metalurgic",
       "alt": "Depozit metalurgic",
       "timp": "noapte",
       "galerie-animata": true
     },
     {
-      "fisier": "Depozit-produse-metalurgice-200x200.jpg",
-      "titlu": "Depozit metalurgic (mic)",
+      "cale_relativa": "Depozit-produse-metalurgice-200x200.jpg",
+      "nume": "Depozit metalurgic (mic)",
       "descriere": "Depozit metalurgic in format mic",
       "alt": "Depozit metalurgic in format mic",
       "timp": "dimineata",
       "galerie-animata": true
     },
     {
-      "fisier": "L.png",
-      "titlu": "Profil L",
+      "cale_relativa": "L.png",
+      "nume": "Profil L",
       "descriere": "Profil structural L",
       "alt": "Profil structural L",
       "timp": "zi",
       "galerie-animata": true
     },
     {
-      "fisier": "U.jpg",
-      "titlu": "Profil U",
+      "cale_relativa": "U.jpg",
+      "nume": "Profil U",
       "descriere": "Profil structural U",
       "alt": "Profil structural U",
       "timp": "noapte",
       "galerie-animata": true
     },
     {
-      "fisier": "imagine-map.png",
-      "titlu": "Harta site",
+      "cale_relativa": "imagine-map.png",
+      "nume": "Harta site",
       "descriere": "Harta interactiva a site-ului",
       "alt": "Harta interactiva a site-ului",
       "timp": "zi",
+      "galerie-animata": true
+    },
+    {
+      "cale_relativa": "sv_heavy_beams.png",
+      "nume": "Grinzi grele HEA/HEB",
+      "descriere": "Stoc de grinzi metalice grele",
+      "alt": "Grinzi metalice grele HEA/HEB",
+      "timp": "zi",
+      "galerie-animata": true
+    },
+    {
+      "cale_relativa": "sv_welding.png",
+      "nume": "Sudura industriala",
+      "descriere": "Imbinare prin sudura a profilelor metalice",
+      "alt": "Proces sudura structura metalica",
+      "timp": "noapte",
+      "galerie-animata": true
+    },
+    {
+      "cale_relativa": "sv_bolts.png",
+      "nume": "Imbinari cu suruburi",
+      "descriere": "Detalii prindere mecanica cu suruburi de inalta rezistenta",
+      "alt": "Imbinare structurala cu buloane",
+      "timp": "dimineata",
+      "galerie-animata": true
+    },
+    {
+      "cale_relativa": "sv_plates.png",
+      "nume": "Table groase de otel",
+      "descriere": "Placi din otel laminate la cald",
+      "alt": "Table groase din otel industrial",
+      "timp": "zi",
+      "galerie-animata": true
+    },
+    {
+      "cale_relativa": "sv_construction.png",
+      "nume": "Hala metalica in constructie",
+      "descriere": "Santier montaj structura metalica industriala",
+      "alt": "Hala industriala cu cadre de otel",
+      "timp": "noapte",
       "galerie-animata": true
     }
   ]

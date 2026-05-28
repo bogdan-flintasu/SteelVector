@@ -7,10 +7,10 @@
 
 hr.metal {
   border: 0;
-  height: 0.6rem;
+  height: 0.8rem;
   border-radius: 999px;
-  background-image: repeating-linear-gradient(135deg, var(--culoare-contur) 0, var(--culoare-contur) 12px, #0d2235 12px, #0d2235 24px);
-  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.45) inset;
+  background-image: repeating-linear-gradient(to bottom, var(--culoare-contur) 0px, var(--culoare-contur) 2px, #0d2235 2px, #0d2235 4px);
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.4) inset;
   margin: 1.2rem 0 1.5rem;
 }
 
@@ -142,54 +142,35 @@ hr.metal {
   pointer-events: none;
 }
 
-.reflexie-container {
-  display: inline-block;
+.reflexie-text {
   position: relative;
+  display: inline-block;
+  color: var(--culoare-titlu);
+  margin-bottom: 4.5rem;
+  z-index: 1;
 }
-
-.reflexie-container img {
-  display: block;
-  width: 100%;
-  border-radius: 0.5rem;
-}
-
-.reflexie-container::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 40%;
-  background: inherit;
+.reflexie-text::after {
+  content: attr(data-text);
   position: absolute;
-  bottom: 0;
+  top: calc(100% + 2px);
   left: 0;
-  pointer-events: none;
-}
-
-.reflexie {
-  -webkit-box-reflect: below 4px linear-gradient(transparent 0%, transparent 50%, rgba(249, 155, 65, 0.08) 70%, rgba(249, 155, 65, 0.2) 100%);
-  display: block;
-  border-radius: 0.5rem;
-  max-width: 100%;
-}
-
-.reflexie-fallback {
-  position: relative;
-  display: inline-block;
-  overflow: hidden;
-}
-
-.reflexie-fallback img {
-  display: block;
-  border-radius: 0.5rem;
-}
-
-.reflexie-fallback .reflexie-imagine-inversata {
-  display: block;
   width: 100%;
-  transform: scaleY(-1);
-  opacity: 0.25;
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, transparent 70%);
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, transparent 70%);
+  transform: scaleY(-1) skewX(-45deg) translateY(-100%);
+  transform-origin: top;
+  color: inherit;
+  opacity: 0.75;
+  filter: blur(1.5px);
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease, opacity 0.6s ease;
+  pointer-events: none;
+  z-index: 10;
+  background: linear-gradient(to bottom, #ff8c00 0%, rgba(249, 155, 65, 0.4) 60%, rgba(249, 155, 65, 0) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.reflexie-text:hover::after {
+  transform: scaleY(-1.8) skewX(-45deg) translateY(-100%);
+  opacity: 0.95;
+  filter: blur(0.75px) drop-shadow(0px 0px 10px rgba(249, 155, 65, 0.9));
 }
 
 #video-bg-section {

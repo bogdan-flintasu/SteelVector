@@ -269,13 +269,13 @@ function verificaGalerieJSON() {
     }
 
     obGalerieParsed.imagini.forEach((img, index) => {
-        const fisier = img && img.fisier;
-        if (!fisier) {
+        const caleRel = img && (img.cale_relativa || img.fisier);
+        if (!caleRel) {
             console.error(`Lipseste numele fisierului pentru imaginea #${index + 1}.`);
             return;
         }
 
-        const caleFisier = path.join(folderGalerie, fisier);
+        const caleFisier = path.join(folderGalerie, caleRel);
         if (!fs.existsSync(caleFisier) || !fs.statSync(caleFisier).isFile()) {
             console.error(`Fisierul imagine nu exista: ${caleFisier}`);
         }
@@ -302,8 +302,14 @@ function initGalerie() {
     pregatesteGalerie(obGlobal.obGalerie.imagini, caleGalerieDisc);
 }
 
-function determinaTimpCurent() {
-    const ora = new Date().getHours();
+function determinaTimpCurent(req) {
+    let ora;
+    if (req && req.query && req.query.ora !== undefined) {
+        ora = parseInt(req.query.ora, 10);
+    } else {
+        ora = new Date().getHours();
+    }
+    
     if (ora >= 5 && ora < 12) {
         return "dimineata";
     }
@@ -332,10 +338,12 @@ async function genereazaVersiuniImagine(caleOriginala) {
 
 async function pregatesteGalerie(imagini, caleGalerieDisc) {
     for (const img of imagini) {
-        if (!img || !img.fisier) {
+        if (!img) continue;
+        const caleRel = img.cale_relativa || img.fisier;
+        if (!caleRel) {
             continue;
         }
-        const caleOriginala = path.join(caleGalerieDisc, img.fisier);
+        const caleOriginala = path.join(caleGalerieDisc, caleRel);
         if (fs.existsSync(caleOriginala)) {
             await genereazaVersiuniImagine(caleOriginala);
         }
@@ -344,15 +352,56 @@ async function pregatesteGalerie(imagini, caleGalerieDisc) {
 
 function genereazaScssGalerieAnimata(n) {
     const nrRanduri = Math.ceil(n / 3);
-    const durata = Math.max(n * 1.5, 12);
+    const durata = Math.max(n * 3, 20); // Smooth premium pacing
     const keyframes = [];
 
+    const maparePozitii = [
+        { col: 0, rand: 0 }, // 1
+        { col: 0, rand: 1 }, // 2
+        { col: 2, rand: 1 }, // 3
+        { col: 1, rand: 1 }, // 4
+        { col: 1, rand: 0 }, // 5
+        { col: 2, rand: 0 }, // 6
+        { col: 2, rand: 2 }, // 7
+        { col: 0, rand: 2 }, // 8
+        { col: 1, rand: 2 }, // 9
+        { col: 0, rand: 3 }, // 10
+        { col: 2, rand: 3 }, // 11
+        { col: 1, rand: 3 }, // 12
+        { col: 0, rand: 4 }, // 13
+        { col: 2, rand: 4 }, // 14
+        { col: 1, rand: 4 }  // 15
+    ];
+
     for (let i = 0; i < n; i += 1) {
-        const progres = (i / Math.max(n - 1, 1)) * 100;
-        const rand = Math.floor(i / 3);
-        const col = i % 3;
-        const rot = i % 2 === 0 ? 0 : 360;
-        keyframes.push(`${progres.toFixed(1)}% { transform: translate(-${col * 100}%, -${rand * 100}%) rotate(${rot}deg); }`);
+        const stepSize = 100 / n;
+        const startPct = i * stepSize;
+        const coordCur = maparePozitii[i] || { col: 0, rand: 0 };
+        const rotCur = i * 360;
+
+        // 1. Începutul pasului i (menținere imagine curentă statică)
+        keyframes.push(`${startPct.toFixed(1)}% { transform-origin: calc(${coordCur.col} * 280px + 140px) calc(${coordCur.rand} * 280px + 140px); transform: translate(-${coordCur.col * 280}px, -${coordCur.rand * 280}px) rotate(${rotCur}deg); }`);
+
+        if (i < n - 1) {
+            const holdPct = startPct + 0.5 * stepSize;
+            const slideEndPct = startPct + 0.75 * stepSize;
+            const rotEndPct = startPct + 0.95 * stepSize;
+
+            const coordNext = maparePozitii[i + 1] || { col: 0, rand: 0 };
+            const rotNext = (i + 1) * 360;
+
+            // 2. Sfârșitul fazei de hold (încă la poziția curentă și rotația curentă)
+            keyframes.push(`${holdPct.toFixed(1)}% { transform-origin: calc(${coordCur.col} * 280px + 140px) calc(${coordCur.rand} * 280px + 140px); transform: translate(-${coordCur.col * 280}px, -${coordCur.rand * 280}px) rotate(${rotCur}deg); }`);
+
+            // 3. Sfârșitul fazei de glisare (am ajuns la noua poziție, dar rotația rămâne cea veche!)
+            keyframes.push(`${slideEndPct.toFixed(1)}% { transform-origin: calc(${coordNext.col} * 280px + 140px) calc(${coordNext.rand} * 280px + 140px); transform: translate(-${coordNext.col * 280}px, -${coordNext.rand * 280}px) rotate(${rotCur}deg); }`);
+
+            // 4. Sfârșitul fazei de rotație (la noua poziție și s-a aplicat și noua rotație de 360deg!)
+            keyframes.push(`${rotEndPct.toFixed(1)}% { transform-origin: calc(${coordNext.col} * 280px + 140px) calc(${coordNext.rand} * 280px + 140px); transform: translate(-${coordNext.col * 280}px, -${coordNext.rand * 280}px) rotate(${rotNext}deg); }`);
+        } else {
+            // Ultimul cadru (hold până la finalul animației)
+            keyframes.push(`100.0% { transform-origin: calc(${coordCur.col} * 280px + 140px) calc(${coordCur.rand} * 280px + 140px); transform: translate(-${coordCur.col * 280}px, -${coordCur.rand * 280}px) rotate(${rotCur}deg); }`);
+        }
     }
 
     const scssContent = `
@@ -362,10 +411,9 @@ function genereazaScssGalerieAnimata(n) {
 }
 
 .galerie-animata-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(${nrRanduri}, 1fr);
-  width: calc(3 * 280px);
+  display: block;
+  position: relative;
+  width: 280px;
   height: 280px;
   overflow: hidden;
   border-width: 8px;
@@ -374,7 +422,14 @@ function genereazaScssGalerieAnimata(n) {
 }
 
 .galerie-animata-inner {
-  display: contents;
+  display: grid;
+  grid-template-columns: repeat(3, 280px);
+  grid-template-rows: repeat(${nrRanduri}, 280px);
+  width: 840px;
+  height: calc(${nrRanduri} * 280px);
+  position: absolute;
+  top: 0;
+  left: 0;
   animation: slideGalerie ${durata}s linear infinite alternate;
 }
 
@@ -473,70 +528,62 @@ app.get("/favicon.ico", (req, res) => {
 // nr_task 8
 // Homepage accesibil pe /, /index si /home.
 app.get(["/", "/index", "/home"], (req, res) => {
-    res.render("pagini/index", { galerie: obGlobal.obGalerie });
+    const timpCurent = determinaTimpCurent(req);
+    const imaginiFiltrate = (obGlobal.obGalerie.imagini || []).filter((img) => img.timp === timpCurent);
+
+    const multipluHome = Math.floor(imaginiFiltrate.length / 3) * 3;
+    const imaginiFinale = imaginiFiltrate.slice(0, multipluHome);
+
+    res.render("pagini/index", {
+        galerie: {
+            cale_galerie: obGlobal.obGalerie.cale_galerie,
+            imagini: imaginiFinale
+        }
+    });
 });
 
-app.get("/galerie", async (req, res) => {
+app.get("/despre", async (req, res) => {
     const caleGalerie = path.join(__dirname, "resurse", "json", "galerie.json");
     if (!fs.existsSync(caleGalerie)) {
-        return afisareEroare(res, 404);
+        return res.render("pagini/despre", { staticGalerie: null, dynamicGalerie: null });
     }
 
     const obGalerie = JSON.parse(fs.readFileSync(caleGalerie, "utf-8"));
-    const timpCurent = determinaTimpCurent();
+    const caleGalerieURL = "/" + String(obGalerie.cale_galerie || "")
+        .replace(/^[/\\]+/, "")
+        .replace(/\\/g, "/");
+
+    // 1. Pregătire Galerie Statică (filtrată după timp)
+    const timpCurent = determinaTimpCurent(req);
     const imaginiFiltrate = (obGalerie.imagini || []).filter((img) => img.timp === timpCurent);
 
-    let imaginiFinale = imaginiFiltrate;
-    if (imaginiFinale.length >= 6) {
-        const multiplu = Math.floor(imaginiFinale.length / 3) * 3;
-        imaginiFinale = imaginiFinale.slice(0, Math.max(multiplu, 6));
-    }
+    const multipluDespre = Math.floor(imaginiFiltrate.length / 3) * 3;
+    const imaginiStatic = imaginiFiltrate.slice(0, multipluDespre);
 
     const caleGalerieDisc = path.join(__dirname, obGalerie.cale_galerie || "resurse/imagini/galerie");
-    await pregatesteGalerie(imaginiFinale, caleGalerieDisc);
+    await pregatesteGalerie(imaginiStatic, caleGalerieDisc);
 
-    const caleGalerieURL = "/" + String(obGalerie.cale_galerie || "")
-        .replace(/^[/\\]+/, "")
-        .replace(/\\/g, "/");
-
-    return res.render("pagini/galerie", {
-        imagini: imaginiFinale,
-        caleGalerie: caleGalerieURL,
-        timpCurent
-    });
-});
-
-app.get("/galerie-animata", async (req, res) => {
-    const caleGalerie = path.join(__dirname, "resurse", "json", "galerie.json");
-    if (!fs.existsSync(caleGalerie)) {
-        return afisareEroare(res, 404);
-    }
-
-    const obGalerie = JSON.parse(fs.readFileSync(caleGalerie, "utf-8"));
+    // 2. Pregătire Galerie Dinamică (selecție aleatoare de 9/12/15 distincte)
     const eligibile = (obGalerie.imagini || []).filter((img) => img["galerie-animata"] === true);
-
     const optiuni = [9, 12, 15];
     const n = optiuni[Math.floor(Math.random() * optiuni.length)];
-    const imagini = eligibile.slice(0, Math.min(n, eligibile.length));
+    const imaginiDinamice = eligibile.slice(0, Math.min(n, eligibile.length));
 
-    genereazaScssGalerieAnimata(imagini.length);
+    genereazaScssGalerieAnimata(imaginiDinamice.length);
     compileazaScss("galerie-animata.scss");
 
-    const caleGalerieURL = "/" + String(obGalerie.cale_galerie || "")
-        .replace(/^[/\\]+/, "")
-        .replace(/\\/g, "/");
-
-    return res.render("pagini/galerie-animata", {
-        imagini,
-        caleGalerie: caleGalerieURL,
-        n: imagini.length
+    return res.render("pagini/despre", {
+        staticGalerie: {
+            imagini: imaginiStatic,
+            caleGalerie: caleGalerieURL,
+            timpCurent
+        },
+        dynamicGalerie: {
+            imagini: imaginiDinamice,
+            caleGalerie: caleGalerieURL,
+            n: imaginiDinamice.length
+        }
     });
-});
-
-// nr_task 13
-// Pagina secundara (de exemplu descriere site).
-app.get("/despre", (req, res) => {
-    res.render("pagini/despre");
 });
 
 // nr_task 9 + nr_task 10
