@@ -111,6 +111,23 @@ $modal-header-border-color:  $sv-orange;
 $box-shadow:  0 0.65rem 1.4rem rgba(0, 0, 0, 0.4);
 $box-shadow-sm: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.3);
 
+// ── Customizare Range Slider Bootstrap ────────────────────────
+// Cerința: bulină 50% mai mare față de font-size html (18px → 27px = 1.5rem)
+$form-range-thumb-width:            1.5rem;
+$form-range-thumb-height:           1.5rem;
+$form-range-thumb-bg:               $sv-orange;
+$form-range-thumb-border:           0;
+$form-range-thumb-border-radius:    50%;
+$form-range-thumb-box-shadow:       0 0.15rem 0.4rem rgba(0, 0, 0, 0.4);
+$form-range-thumb-focus-box-shadow: 0 0 0 0.25rem rgba($sv-orange, 0.3);
+$form-range-thumb-active-bg:        color.adjust($sv-orange, $lightness: 15%);
+$form-range-track-bg:               color.adjust($sv-dark, $lightness: 12%);
+$form-range-track-height:           0.4rem;
+
+// ── Customizare butoane — rază și grosime border ──────────────
+$btn-border-width:                  2px;
+$btn-border-radius:                 $border-radius;
+
 $navbar-dark-color:          $sv-light;
 $navbar-dark-hover-color:    $sv-orange;
 $navbar-dark-active-color:   $sv-orange;

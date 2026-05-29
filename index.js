@@ -2,7 +2,18 @@ const express = require("express");
 const fs = require("fs");
 const path = require("path");
 const sharp = require("sharp");
+const { Pool } = require("pg");
 const { compileazaScss, compileazaToateScss, urmaresteScss } = require("./lib/scss-compiler");
+
+// PostgreSQL connection pool
+const pool = new Pool({
+    user: "sv_user",
+    host: "localhost",
+    database: "steelvector_db",
+    password: "sv_pass",
+    port: 5432,
+    connectionTimeoutMillis: 2000 // Așteaptă maxim 2 secunde pentru a evita blocarea în caz de offline
+});
 
 const app = express();
 
@@ -492,6 +503,23 @@ initGalerie();
 compileazaToateScss();
 urmaresteScss();
 
+// Inițializăm categoriile implicit cu valori de fallback la pornirea serverului (prevenim blocaje)
+app.locals.categoriiProduse = ["IPE", "HEA", "HEB", "teava", "bara"];
+
+// Încercăm să încărcăm asincron categoriile reale din ENUM-ul bazei de date
+async function incarcaCategoriiProduse() {
+    try {
+        const rezultat = await pool.query(
+            "SELECT unnest(enum_range(NULL::tip_profil))::text AS val"
+        );
+        app.locals.categoriiProduse = rezultat.rows.map(r => r.val);
+        console.log("Categorii de produse încărcate cu succes din DB:", app.locals.categoriiProduse);
+    } catch (err) {
+        console.warn("Eroare la conexiunea DB la startup (se folosesc categoriile predefinite):", err.message);
+    }
+}
+incarcaCategoriiProduse();
+
 // nr_task 19
 // Blocam cereri directe catre fisiere .ejs.
 app.use((req, res, next) => {
@@ -584,6 +612,87 @@ app.get("/despre", async (req, res) => {
             n: imaginiDinamice.length
         }
     });
+});
+
+// ── Ruta GET /produse — afișare produse cu filtrare pe server (după tip) ──
+app.get("/produse", async (req, res) => {
+    try {
+        const tipSelectat = req.query.tip || null;
+        let queryText, queryParams;
+
+        if (tipSelectat) {
+            queryText = "SELECT * FROM produse WHERE tip = $1 ORDER BY id";
+            queryParams = [tipSelectat];
+        } else {
+            queryText = "SELECT * FROM produse ORDER BY id";
+            queryParams = [];
+        }
+
+        const rezultat = await pool.query(queryText, queryParams);
+        const produse = rezultat.rows;
+
+        // Obtinem valorile unice ale finisajelor pentru selectul simplu
+        const finisajeRez = await pool.query("SELECT DISTINCT finisaj FROM produse ORDER BY finisaj");
+        const finisaje = finisajeRez.rows.map(r => r.finisaj);
+
+        // Obtinem toate certificarile unice pentru selectul multiplu
+        const certRez = await pool.query("SELECT certificari FROM produse WHERE certificari IS NOT NULL");
+        const setCertificari = new Set();
+        certRez.rows.forEach(r => {
+            r.certificari.split(",").forEach(c => setCertificari.add(c.trim()));
+        });
+        const certificari = [...setCertificari].sort();
+
+        // Obtinem valorile ENUM pentru aplicatie (pentru radiobuttons)
+        const aplicatiiRez = await pool.query(
+            "SELECT unnest(enum_range(NULL::aplicatie_profil))::text AS val"
+        );
+        const aplicatii = aplicatiiRez.rows.map(r => r.val);
+
+        // Calculam min/max pret pentru range
+        const pretMinMax = await pool.query("SELECT MIN(pret) AS pmin, MAX(pret) AS pmax FROM produse");
+        const pretMin = parseFloat(pretMinMax.rows[0].pmin) || 0;
+        const pretMax = parseFloat(pretMinMax.rows[0].pmax) || 10000;
+
+        // Obtinem lungimi distincte pentru datalist
+        const lungimiRez = await pool.query("SELECT DISTINCT lungime_mm FROM produse ORDER BY lungime_mm");
+        const lungimi = lungimiRez.rows.map(r => r.lungime_mm);
+
+        res.render("pagini/produse", {
+            produse,
+            tipSelectat,
+            finisaje,
+            certificari,
+            aplicatii,
+            pretMin,
+            pretMax,
+            lungimi
+        });
+    } catch (err) {
+        console.error("Eroare la ruta /produse:", err.message);
+        return afisareEroare(res, 500);
+    }
+});
+
+// ── Ruta GET /produs/:id — pagina individuala produs ──
+app.get("/produs/:id", async (req, res) => {
+    try {
+        const produsId = parseInt(req.params.id, 10);
+        if (isNaN(produsId)) {
+            return afisareEroare(res, 400);
+        }
+
+        const rezultat = await pool.query("SELECT * FROM produse WHERE id = $1", [produsId]);
+        if (rezultat.rows.length === 0) {
+            return afisareEroare(res, 404);
+        }
+
+        const produs = rezultat.rows[0];
+        res.render("pagini/produs", { produs });
+    } catch (err) {
+        console.error("Eroare la ruta /produs/:id:", err.message);
+        return afisareEroare(res, 500);
+    }
 });
 
 // nr_task 9 + nr_task 10

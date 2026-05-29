@@ -20,6 +20,16 @@
             title="Harta locației Facultății de Matematică și Informatică">
         </iframe>
     </address>
+
+    <!-- Buton schimbare temă (switch Bootstrap) -->
+    <div class="form-check form-switch" id="tema-toggle-wrapper">
+        <input class="form-check-input" type="checkbox" role="switch" id="tema-toggle-switch">
+        <label class="form-check-label" for="tema-toggle-switch" id="tema-toggle-label">
+            <i class="fas fa-moon" id="tema-icon"></i>
+            <span id="tema-text">Temă întunecată</span>
+        </label>
+    </div>
+
     <hr>
     <a href="#" id="link-top" data-tooltip="Înapoi sus">
         <div id="top-container">
@@ -34,3 +44,37 @@
     <p>IP utilizator: <strong><%= ipUtilizator %></strong></p>
     <p id="banner-print">Acesta este un proiect școlar!</p>
 </footer>
+
+<!-- Script global: Tema light/dark cu localStorage -->
+<script>
+(function() {
+    const toggle = document.getElementById("tema-toggle-switch");
+    const icon = document.getElementById("tema-icon");
+    const text = document.getElementById("tema-text");
+
+    function aplicaTema(tema) {
+        if (tema === "light") {
+            document.body.classList.add("tema-light");
+            toggle.checked = true;
+            icon.className = "fas fa-sun";
+            text.textContent = "Temă deschisă";
+        } else {
+            document.body.classList.remove("tema-light");
+            toggle.checked = false;
+            icon.className = "fas fa-moon";
+            text.textContent = "Temă întunecată";
+        }
+    }
+
+    // La incarcare: citim din localStorage
+    const temaSalvata = localStorage.getItem("sv-tema");
+    aplicaTema(temaSalvata || "dark");
+
+    // La click pe switch
+    toggle.addEventListener("change", function() {
+        const temaNoua = this.checked ? "light" : "dark";
+        localStorage.setItem("sv-tema", temaNoua);
+        aplicaTema(temaNoua);
+    });
+})();
+</script>

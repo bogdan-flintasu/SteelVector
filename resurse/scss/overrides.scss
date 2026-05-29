@@ -125,3 +125,46 @@ hr:not(.metal) {
   border-color: var(--culoare-contur);
   opacity: 0.4;
 }
+
+// ── Tema toggle switch ────────────────────────────────────────
+#tema-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  margin-top: 0.5rem;
+
+  .form-check-input {
+    width: 2.5rem;
+    height: 1.3rem;
+    cursor: pointer;
+    border-color: rgba(249, 155, 65, 0.5);
+    background-color: rgba(28, 43, 57, 0.8);
+
+    &:checked {
+      background-color: #f99b41;
+      border-color: #f99b41;
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(249, 155, 65, 0.25);
+    }
+  }
+
+  #tema-toggle-label {
+    color: var(--culoare-titlu);
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+
+    i {
+      margin-right: 0.3rem;
+      color: #f99b41;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover i {
+      transform: rotate(20deg) scale(1.15);
+    }
+  }
+}

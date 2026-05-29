@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <title>SteelVector — <%= produs.nume %></title>
+    <meta name="description"
+        content="<%= produs.descriere ? produs.descriere.substring(0, 160) : 'Detalii produs SteelVector' %>">
+    <meta name="keywords"
+        content="<%= produs.nume %>, <%= produs.tip %>, profile metalice, SteelVector">
+    <%- include('../fragmente/head') %>
+</head>
+
+<body class="saira">
+    <%- include('../fragmente/header') %>
+    <main>
+        <section class="produs-detaliu">
+            <a href="/produse" class="btn btn-outline-primary mb-3">
+                <i class="bi bi-arrow-left"></i>
+                <span class="d-none d-md-inline">Înapoi la produse</span>
+            </a>
+
+            <div class="produs-detaliu-layout">
+                <div class="produs-detaliu-imagine">
+                    <img src="/resurse/imagini/galerie/<%= produs.imagine %>"
+                        alt="<%= produs.nume %>" class="img-fluid">
+                </div>
+
+                <div class="produs-detaliu-info">
+                    <h2><%= produs.nume %></h2>
+
+                    <div class="produs-detaliu-badges mb-3">
+                        <span class="badge bg-primary fs-6"><%= produs.tip.toUpperCase() %></span>
+                        <span class="badge bg-secondary fs-6"><%= produs.aplicatie.charAt(0).toUpperCase() + produs.aplicatie.slice(1) %></span>
+                        <% if (produs.livrare_rapida) { %>
+                            <span class="badge bg-success fs-6"><i class="bi bi-truck"></i> Livrare rapidă</span>
+                        <% } %>
+                    </div>
+
+                    <p class="produs-detaliu-descriere"><%= produs.descriere %></p>
+
+                    <div class="produs-detaliu-pret">
+                        <span class="pret-mare"><%= parseFloat(produs.pret).toFixed(2) %> lei</span>
+                        <small class="text-muted">/ bucată</small>
+                    </div>
+
+                    <table class="table table-hover produs-detaliu-tabel mt-3">
+                        <tbody>
+                            <tr>
+                                <th><i class="bi bi-hash"></i> ID Produs</th>
+                                <td><%= produs.id %></td>
+                            </tr>
+                            <tr>
+                                <th><i class="bi bi-tag"></i> Preț</th>
+                                <td><strong><%= parseFloat(produs.pret).toFixed(2) %> lei</strong></td>
+                            </tr>
+                            <tr>
+                                <th><i class="bi bi-arrows-expand"></i> Lungime</th>
+                                <td><%= produs.lungime_mm %> mm (<%= (produs.lungime_mm / 1000).toFixed(1) %> m)</td>
+                            </tr>
+                            <tr>
+                                <th><i class="bi bi-box-seam"></i> Tip profil</th>
+                                <td><%= produs.tip.toUpperCase() %></td>
+                            </tr>
+                            <tr>
+                                <th><i class="bi bi-gear"></i> Aplicație</th>
+                                <td><%= produs.aplicatie.charAt(0).toUpperCase() + produs.aplicatie.slice(1) %></td>
+                            </tr>
+                            <tr>
+                                <th><i class="bi bi-palette2"></i> Finisaj</th>
+                                <td><%= produs.finisaj.charAt(0).toUpperCase() + produs.finisaj.slice(1) %></td>
+                            </tr>
+                            <tr>
+                                <th><i class="bi bi-award"></i> Certificări</th>
+                                <td>
+                                    <% if (produs.certificari) { %>
+                                        <% produs.certificari.split(',').forEach(c => { %>
+                                            <span class="badge bg-info text-dark me-1"><%= c.trim() %></span>
+                                        <% }); %>
+                                    <% } else { %>
+                                        —
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><i class="bi bi-truck"></i> Livrare rapidă (24h)</th>
+                                <td>
+                                    <% if (produs.livrare_rapida) { %>
+                                        <span class="badge bg-success">Da — disponibil</span>
+                                    <% } else { %>
+                                        <span class="badge bg-danger">Nu — termen standard</span>
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <%
+                                const dataObj = new Date(produs.data_adaugare);
+                                const zileSapt = ['Duminică','Luni','Marți','Miercuri','Joi','Vineri','Sâmbătă'];
+                                const luni = ['Ianuarie','Februarie','Martie','Aprilie','Mai','Iunie','Iulie','August','Septembrie','Octombrie','Noiembrie','Decembrie'];
+                                const dataFormatata = dataObj.getDate() + '/' + luni[dataObj.getMonth()] + '/' + dataObj.getFullYear() + ' (' + zileSapt[dataObj.getDay()] + ')';
+                                const dataISO = dataObj.toISOString().split('T')[0];
+                            %>
+                            <tr>
+                                <th><i class="bi bi-calendar-event"></i> Data adăugare</th>
+                                <td><time datetime="<%= dataISO %>"><%= dataFormatata %></time></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <a href="/produse" class="btn btn-primary mt-3">
+                        <i class="bi bi-arrow-left"></i> Înapoi la catalog
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <%- include('../fragmente/footer') %>
+
+    <script>
+    (function() {
+        const temaSalvata = localStorage.getItem("sv-tema");
+        if (temaSalvata === "light") {
+            document.body.classList.add("tema-light");
+        }
+    })();
+    </script>
+</body>
+</html>

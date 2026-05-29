@@ -52,10 +52,12 @@
                 <div class="text-icon">Produse</div>
             </div>
             <ul>
-                <li><a href="#">Toate</a></li>
-                <li><a href="#">Profile IPE</a></li>
-                <li><a href="#">Profile HEA</a></li>
-                <li><a href="#">Bare rotunde</a></li>
+                <li><a href="/produse">Toate</a></li>
+                <% if (typeof categoriiProduse !== 'undefined' && Array.isArray(categoriiProduse)) { %>
+                    <% for (const cat of categoriiProduse) { %>
+                        <li><a href="/produse?tip=<%= cat %>"><%= cat.charAt(0).toUpperCase() + cat.slice(1) %></a></li>
+                    <% } %>
+                <% } %>
             </ul>
         </li>
 
