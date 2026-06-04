@@ -330,6 +330,250 @@ function determinaTimpCurent(req) {
     return "noapte";
 }
 
+// Bonus 1, 7, 8 si 10a/10b
+// Normalizam textul pentru comparatii fara diacritice si cu majuscule/minuscule echivalente.
+function normalizeazaText(text) {
+    return String(text ?? "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+}
+
+// Bonus 9
+// Determinam variantele de imagine disponibile pentru un produs.
+function extrageImaginiProdus(imaginePrincipala) {
+    const folderImagini = path.join(__dirname, "resurse", "imagini", "galerie");
+    if (!imaginePrincipala) {
+        return [];
+    }
+
+    const extensie = path.extname(imaginePrincipala);
+    
+    // Always start with the main image
+    const imagini = [imaginePrincipala];
+
+    // Let's add other distinct images from the gallery folder
+    try {
+        if (fs.existsSync(folderImagini)) {
+            const files = fs.readdirSync(folderImagini).filter(f => {
+                const ext = path.extname(f).toLowerCase();
+                return (ext === '.png' || ext === '.jpg' || ext === '.jpeg') && !f.includes('_md') && !f.includes('_sm');
+            });
+            
+            // Shuffle files to pick randomized ones
+            files.sort(() => Math.random() - 0.5);
+            
+            let count = 0;
+            for (const file of files) {
+                if (file !== imaginePrincipala && !imagini.includes(file)) {
+                    imagini.push(file);
+                    count++;
+                    if (count >= 3) break; // we want 4 images in total
+                }
+            }
+        }
+    } catch (err) {
+        console.error("Eroare la citirea directorului de imagini:", err.message);
+    }
+
+    return imagini.map((fisier) => `/resurse/imagini/galerie/${fisier}`);
+}
+
+// Bonus 1 si 9
+// Adaugam pe fiecare rand din DB date derivate utile in UI.
+function pregatesteProdus(rand) {
+    const certificari = (rand.certificari || "")
+        .split(",")
+        .map((elem) => elem.trim())
+        .filter(Boolean);
+
+    return {
+        ...rand,
+        pret: Number(rand.pret),
+        lungime_mm: Number(rand.lungime_mm),
+        certificari,
+        certificatText: certificari.join(", "),
+        certList: certificari,
+        imagine_varianta: extrageImaginiProdus(rand.imagine),
+        nume_normalizat: normalizeazaText(rand.nume),
+        descriere_normalizata: normalizeazaText(rand.descriere),
+        finisaj_normalizat: normalizeazaText(rand.finisaj),
+        aplicatie_normalizata: normalizeazaText(rand.aplicatie),
+        tip_normalizat: normalizeazaText(rand.tip)
+    };
+}
+
+// Bonus 4, 5, 7, 8 si 10a/10b
+// Aplicam filtrarea, sortarea si paginarea pe server.
+function proceseazaListaProduse(produse, query = {}) {
+    let rezultate = [...produse];
+
+    const tip = normalizeazaText(query.tip);
+    const nume = normalizeazaText(query.nume);
+    const descriere = normalizeazaText(query.descriere);
+    const lungime = normalizeazaText(query.lungime);
+    const finisaj = normalizeazaText(query.finisaj);
+    const aplicatie = normalizeazaText(query.aplicatie);
+    const certificari = normalizeazaText(query.certificari);
+    const sortCheie1 = String(query.sortCheie1 || "nume");
+    const sortCheie2 = String(query.sortCheie2 || "pret");
+    const sortDirectie = String(query.sortDirectie || "asc");
+    const pagina = Math.max(parseInt(query.pagina, 10) || 1, 1);
+    const elementePerPagina = Math.max(parseInt(query.elementePerPagina, 10) || 6, 1);
+    const fixeIds = new Set(String(query.fixe || "").split(",").map((elem) => elem.trim()).filter(Boolean));
+    const ascunseIds = new Set(String(query.ascunseSesiune || "").split(",").map((elem) => elem.trim()).filter(Boolean));
+
+    const pretMin = query.pretMin !== undefined && query.pretMin !== "" ? parseFloat(query.pretMin) : null;
+    const pretMax = query.pretMax !== undefined && query.pretMax !== "" ? parseFloat(query.pretMax) : null;
+    const doarLivrare = String(query.livrare || "").toLowerCase() === "true";
+
+    if (tip) {
+        rezultate = rezultate.filter((produs) => normalizeazaText(produs.tip) === tip);
+    }
+
+    if (nume) {
+        rezultate = rezultate.filter((produs) => produs.nume_normalizat.includes(nume));
+    }
+
+    if (descriere) {
+        rezultate = rezultate.filter((produs) => produs.descriere_normalizata.includes(descriere));
+    }
+
+    if (lungime) {
+        rezultate = rezultate.filter((produs) => normalizeazaText(produs.lungime_mm) === lungime);
+    }
+
+    if (finisaj) {
+        rezultate = rezultate.filter((produs) => produs.finisaj_normalizat === finisaj);
+    }
+
+    if (aplicatie) {
+        rezultate = rezultate.filter((produs) => produs.aplicatie_normalizata === aplicatie);
+    }
+
+    if (certificari) {
+        const cerinte = certificari.split(",").map((elem) => elem.trim()).filter(Boolean);
+        rezultate = rezultate.filter((produs) => cerinte.every((cerinta) => produs.certList.some((cert) => normalizeazaText(cert).includes(cerinta))));
+    }
+
+    if (pretMin !== null && !Number.isNaN(pretMin)) {
+        rezultate = rezultate.filter((produs) => produs.pret >= pretMin);
+    }
+
+    if (pretMax !== null && !Number.isNaN(pretMax)) {
+        rezultate = rezultate.filter((produs) => produs.pret <= pretMax);
+    }
+
+    if (doarLivrare) {
+        rezultate = rezultate.filter((produs) => Boolean(produs.livrare_rapida));
+    }
+
+    if (ascunseIds.size) {
+        rezultate = rezultate.filter((produs) => !ascunseIds.has(String(produs.id)));
+    }
+
+    const produseFixate = produse.filter((produs) => fixeIds.has(String(produs.id)) && !ascunseIds.has(String(produs.id)));
+    const iduriRezultate = new Set(rezultate.map((produs) => String(produs.id)));
+    produseFixate.forEach((produs) => {
+        if (!iduriRezultate.has(String(produs.id)) && !ascunseIds.has(String(produs.id))) {
+            rezultate.push(produs);
+        }
+    });
+
+    rezultate = rezultate.map((produs) => ({
+        ...produs,
+        esteFixat: fixeIds.has(String(produs.id))
+    }));
+
+    const cheiSortare = {
+        nume: (produs) => produs.nume_normalizat,
+        pret: (produs) => Number(produs.pret),
+        lungime: (produs) => Number(produs.lungime_mm),
+        tip: (produs) => produs.tip_normalizat,
+        aplicatie: (produs) => produs.aplicatie_normalizata,
+        finisaj: (produs) => produs.finisaj_normalizat,
+        descriere: (produs) => String(produs.descriere || "").length
+    };
+
+    const cheiSelectate = [sortCheie1, sortCheie2].map((cheie) => cheiSortare[cheie] ? cheie : "nume");
+
+    rezultate.sort((a, b) => {
+        if (a.esteFixat !== b.esteFixat) {
+            return a.esteFixat ? -1 : 1;
+        }
+
+        const semn = sortDirectie === "desc" ? -1 : 1;
+
+        for (const cheie of cheiSelectate) {
+            const valoareA = cheiSortare[cheie](a);
+            const valoareB = cheiSortare[cheie](b);
+            const comparatie = valoareA < valoareB ? -1 : valoareA > valoareB ? 1 : 0;
+            if (comparatie !== 0) {
+                return semn * comparatie;
+            }
+        }
+
+        return 0;
+    });
+
+    const total = rezultate.length;
+    const totalPagini = Math.max(Math.ceil(total / elementePerPagina), 1);
+    const paginaCurenta = Math.min(pagina, totalPagini);
+    const start = (paginaCurenta - 1) * elementePerPagina;
+    const produsePaginare = rezultate.slice(start, start + elementePerPagina);
+
+    return {
+        produse: produsePaginare,
+        total,
+        totalPagini,
+        paginaCurenta,
+        elementePerPagina
+    };
+}
+
+// Bonus 1
+// Construim valorile derivate pentru filtre direct din datele din DB.
+async function obtineMetaProduse() {
+    const finisajeRez = await pool.query("SELECT DISTINCT finisaj FROM produse ORDER BY finisaj");
+    const finisaje = finisajeRez.rows.map((r) => r.finisaj);
+
+    const certRez = await pool.query("SELECT certificari FROM produse WHERE certificari IS NOT NULL");
+    const setCertificari = new Set();
+    certRez.rows.forEach((r) => {
+        String(r.certificari || "")
+            .split(",")
+            .map((c) => c.trim())
+            .filter(Boolean)
+            .forEach((c) => setCertificari.add(c));
+    });
+    const certificari = [...setCertificari].sort((a, b) => a.localeCompare(b, "ro"));
+
+    const aplicatiiRez = await pool.query("SELECT unnest(enum_range(NULL::aplicatie_profil))::text AS val");
+    const aplicatii = aplicatiiRez.rows.map((r) => r.val);
+
+    const tipuriRez = await pool.query("SELECT unnest(enum_range(NULL::tip_profil))::text AS val");
+    const tipuri = tipuriRez.rows.map((r) => r.val);
+
+    const pretMinMax = await pool.query("SELECT MIN(pret) AS pmin, MAX(pret) AS pmax FROM produse");
+    const pretMin = parseFloat(pretMinMax.rows[0].pmin) || 0;
+    const pretMax = parseFloat(pretMinMax.rows[0].pmax) || 10000;
+
+    const lungimiRez = await pool.query("SELECT DISTINCT lungime_mm FROM produse ORDER BY lungime_mm");
+    const lungimi = lungimiRez.rows.map((r) => r.lungime_mm);
+
+    return {
+        finisaje,
+        certificari,
+        aplicatii,
+        tipuri,
+        pretMin,
+        pretMax,
+        lungimi,
+        elementePerPagina: 6
+    };
+}
+
 async function genereazaVersiuniImagine(caleOriginala) {
     const parsed = path.parse(caleOriginala);
     const caleSm = path.join(parsed.dir, `${parsed.name}_sm${parsed.ext}`);
@@ -614,63 +858,49 @@ app.get("/despre", async (req, res) => {
     });
 });
 
-// ── Ruta GET /produse — afișare produse cu filtrare pe server (după tip) ──
+// Bonus 1, 4, 5, 7, 8 si 10a/10b
+// Ruta principala pentru pagina de produse: randare initiala + date derivate pentru UI.
 app.get("/produse", async (req, res) => {
     try {
-        const tipSelectat = req.query.tip || null;
-        let queryText, queryParams;
-
-        if (tipSelectat) {
-            queryText = "SELECT * FROM produse WHERE tip = $1 ORDER BY id";
-            queryParams = [tipSelectat];
-        } else {
-            queryText = "SELECT * FROM produse ORDER BY id";
-            queryParams = [];
-        }
-
-        const rezultat = await pool.query(queryText, queryParams);
-        const produse = rezultat.rows;
-
-        // Obtinem valorile unice ale finisajelor pentru selectul simplu
-        const finisajeRez = await pool.query("SELECT DISTINCT finisaj FROM produse ORDER BY finisaj");
-        const finisaje = finisajeRez.rows.map(r => r.finisaj);
-
-        // Obtinem toate certificarile unice pentru selectul multiplu
-        const certRez = await pool.query("SELECT certificari FROM produse WHERE certificari IS NOT NULL");
-        const setCertificari = new Set();
-        certRez.rows.forEach(r => {
-            r.certificari.split(",").forEach(c => setCertificari.add(c.trim()));
-        });
-        const certificari = [...setCertificari].sort();
-
-        // Obtinem valorile ENUM pentru aplicatie (pentru radiobuttons)
-        const aplicatiiRez = await pool.query(
-            "SELECT unnest(enum_range(NULL::aplicatie_profil))::text AS val"
-        );
-        const aplicatii = aplicatiiRez.rows.map(r => r.val);
-
-        // Calculam min/max pret pentru range
-        const pretMinMax = await pool.query("SELECT MIN(pret) AS pmin, MAX(pret) AS pmax FROM produse");
-        const pretMin = parseFloat(pretMinMax.rows[0].pmin) || 0;
-        const pretMax = parseFloat(pretMinMax.rows[0].pmax) || 10000;
-
-        // Obtinem lungimi distincte pentru datalist
-        const lungimiRez = await pool.query("SELECT DISTINCT lungime_mm FROM produse ORDER BY lungime_mm");
-        const lungimi = lungimiRez.rows.map(r => r.lungime_mm);
+        const metaProduse = await obtineMetaProduse();
+        const produseIntermediare = await pool.query("SELECT * FROM produse ORDER BY id");
+        const produseProcesate = produseIntermediare.rows.map(pregatesteProdus);
+        const produse = req.query.tip
+            ? produseProcesate.filter((produs) => normalizeazaText(produs.tip) === normalizeazaText(req.query.tip))
+            : produseProcesate;
 
         res.render("pagini/produse", {
             produse,
-            tipSelectat,
-            finisaje,
-            certificari,
-            aplicatii,
-            pretMin,
-            pretMax,
-            lungimi
+            tipSelectat: req.query.tip || null,
+            ...metaProduse,
+            elementePerPagina: metaProduse.elementePerPagina
         });
     } catch (err) {
         console.error("Eroare la ruta /produse:", err.message);
         return afisareEroare(res, 500);
+    }
+});
+
+// Bonus 10a si 10b
+// Endpoint folosit de fetch() pentru filtrare, sortare si paginare server-side.
+app.get("/api/produse", async (req, res) => {
+    try {
+        const rezultat = await pool.query("SELECT * FROM produse ORDER BY id");
+        const produse = rezultat.rows.map(pregatesteProdus);
+        const metaProduse = await obtineMetaProduse();
+        const rezultatProcesat = proceseazaListaProduse(produse, {
+            ...req.query,
+            elementePerPagina: req.query.elementePerPagina || metaProduse.elementePerPagina
+        });
+
+        res.json({
+            ...rezultatProcesat,
+            filtre: req.query,
+            meta: metaProduse
+        });
+    } catch (err) {
+        console.error("Eroare la ruta /api/produse:", err.message);
+        return res.status(500).json({ mesaj: "Eroare la prelucrarea produselor." });
     }
 });
 
@@ -687,7 +917,7 @@ app.get("/produs/:id", async (req, res) => {
             return afisareEroare(res, 404);
         }
 
-        const produs = rezultat.rows[0];
+        const produs = pregatesteProdus(rezultat.rows[0]);
         res.render("pagini/produs", { produs });
     } catch (err) {
         console.error("Eroare la ruta /produs/:id:", err.message);

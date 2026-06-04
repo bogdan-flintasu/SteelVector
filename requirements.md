@@ -1,3 +1,159 @@
+## Raport de implementare
+
+Documentul de mai jos mapează cerințele din tema de produse pe implementarea curentă din proiect, astfel încât să poată fi prezentate ușor la verificare.
+
+### 1. Pagina de produse și pagina de produs unic
+
+Aplicația folosește tema SteelVector ca set de entități de tip profiluri metalice. Pagina de produse afișează doar informațiile relevante pentru filtrare și sortare, iar pagina de produs unic afișează toate detaliile produsului. Datele sunt livrate din PostgreSQL și trec prin `locals`/EJS.
+
+Referințe:
+- [Ruta și datele derivate pentru produse](index.js#L525)
+- [Pagina de produse](views/pagini/produse.ejs#L15)
+- [Pagina de produs unic cu galerie multi-imagine](views/pagini/produs.ejs#L25)
+
+### 2. Baza de date și modelul produselor
+
+Tabelul `produse` conține câmpurile cerute de temă: `id`, `nume`, `descriere`, `imagine`, `tip`, `aplicatie`, `pret`, `lungime_mm`, `data_adaugare`, `finisaj`, `certificari`, `livrare_rapida`. Categoria mare este definită ca enum, iar categoria secundară este și ea enum.
+
+Referințe:
+- [Schema bazei de date](produse.sql)
+- [Normalizarea și pregătirea produselor pentru UI](index.js#L335)
+
+### 3. Meniu și filtrare pe categorie mare
+
+Opțiunile din meniul Produse sunt generate din enum-ul bazei de date și sunt transmise în template prin `locals`. Click pe o categorie păstrează aceeași pagină și filtrează server-side produsele după tip.
+
+Referințe:
+- [Încărcarea categoriilor de produse din enum](index.js#L525)
+- [Ruta /produse cu filtrare după tip](index.js#L851)
+- [Legătura dintre categorie și pagina de produse](views/fragmente/header.ejs)
+
+### 4. Sortare, filtrare și calculare
+
+Pagina de produse folosește inputuri Bootstrap pentru toate filtrele cerute: text, range, datalist, radio/select, checkbox, textarea și select multiplu. Filtrarea se execută imediat la schimbarea valorilor, prin `fetch()` către server. Sortarea folosește două chei în ordinea cerută, iar calculul afișează media prețurilor într-un div creat dinamic pentru 2 secunde.
+
+Referințe:
+- [Filtrele și butoanele din pagina de produse](views/pagini/produse.ejs#L21)
+- [Filtrarea automată la change/input](views/pagini/produse.ejs#L621)
+- [Sortarea pe două chei și paginarea](views/pagini/produse.ejs#L414)
+
+### 5. Inputuri derivate din baza de date
+
+Valorile pentru filtre nu sunt scrise manual. Minimul și maximul pentru preț, valorile unice pentru finisaje, certificări, aplicații și lungimi sunt citite din DB și trimise în template.
+
+Referințe:
+- [Construirea meta-informațiilor din DB](index.js#L525)
+- [Prinderea valorilor în template](views/pagini/produse.ejs#L21)
+
+### 6. Bonusuri implementate
+
+Bonus 2, 3, 4, 5, 6, 7, 8, 9, 10a/10b și 11 au fost implementate direct în fluxul de produse.
+
+#### Bonus 2 - mai multe teme
+
+Am înlocuit switch-ul light/dark cu un selector de 3 teme: `dark`, `light`, `copper`. Tema este memorată în `localStorage` și se aplică pe toate paginile.
+
+Referințe:
+- [Selectorul de temă din footer](views/fragmente/footer.ejs#L26)
+- [Scriptul care aplică tema](views/fragmente/footer.ejs#L52)
+- [Variabilele CSS pentru teme](resurse/css/general.css#L170)
+
+#### Bonus 3 - mesaj când nu există produse
+
+Dacă filtrarea elimină toate produsele, zona de carduri se golește și apare un mesaj clar: „Nu există produse conform filtrării curente”.
+
+Referințe:
+- [Mesajul fără rezultate](views/pagini/produse.ejs#L266)
+- [Randarea condiționată a produselor](views/pagini/produse.ejs#L512)
+
+#### Bonus 4 - filtrare la onchange
+
+Filtrarea se execută imediat la schimbarea valorilor din inputuri, fără să fie necesar click pe butonul de filtrare. Butonul rămâne disponibil pentru aplicații manuale și pentru prezentare.
+
+Referințe:
+- [Delegarea evenimentelor input/change](views/pagini/produse.ejs#L621)
+
+#### Bonus 5 - paginare
+
+Paginarea este server-side prin `fetch()`. Se afișează un număr fix de produse pe pagină, iar pagina este redată prin butoane numerice. Numărul de produse pe pagină este configurat din server și trecut în template.
+
+Referințe:
+- [Logica de paginare în server](index.js#L403)
+- [Randarea butoanelor de paginare](views/pagini/produse.ejs#L512)
+
+#### Bonus 6 - butoane pe produs
+
+Fiecare produs afișat are trei butoane cu iconuri și tooltip-uri:
+- fixare permanentă pe ecran prin `localStorage`
+- ascundere temporară în afișarea curentă
+- ascundere în sesiunea curentă prin `sessionStorage`
+
+Referințe:
+- [Butoanele fiecărui card](views/pagini/produse.ejs#L210)
+- [Delegarea acțiunilor pe carduri](views/pagini/produse.ejs#L622)
+- [Suport server pentru produsele fixate/ascunse](index.js#L403)
+
+#### Bonus 7 - diacritice
+
+Căutarea text în nume și descriere normalizează diacriticele, astfel încât `briose` și `brioșe` sunt tratate echivalent.
+
+Referințe:
+- [Normalizarea textului în server](index.js#L335)
+- [Normalizarea textului în client](views/pagini/produse.ejs#L314)
+
+#### Bonus 8 - sortare după două chei
+
+Sortarea acceptă două chei și două direcții. Prima cheie decide ordinea principală, iar a doua cheie decide ordinea pentru valorile egale.
+
+Referințe:
+- [Sortarea server-side după două chei](index.js#L403)
+- [Controalele pentru sortare](views/pagini/produse.ejs#L112)
+
+#### Bonus 9 - imagini multiple
+
+Pe pagina de produs unic se afișează imaginea principală și se pot parcurge variantele disponibile cu butoane. Pe pagina de produse și în modal sunt folosite aceleași variante de imagine.
+
+Referințe:
+- [Galeria de imagini din pagina de produs](views/pagini/produs.ejs#L25)
+- [JavaScript-ul galeriei](views/pagini/produs.ejs#L133)
+- [Imagini multiple în modalul de produs](views/pagini/produse.ejs#L274)
+
+#### Bonus 10a și 10b - filtrare și sortare pe server cu fetch()
+
+Filtrarea și sortarea sunt mutate pe server. Clientul trimite inputurile către `/api/produse` prin `fetch()`, iar serverul întoarce lista filtrată, sortată și paginată.
+
+Referințe:
+- [Endpointul API pentru produse](index.js#L874)
+- [Încărcarea produselor prin fetch()](views/pagini/produse.ejs#L414)
+
+#### Bonus 11 - modal box pentru produs
+
+Click pe un card deschide un modal direct în pagina de produse. Modalul se închide cu buton, click în afara lui sau tasta `Escape`.
+
+Referințe:
+- [Markup modal în pagina de produse](views/pagini/produse.ejs#L274)
+- [Deschiderea modalului](views/pagini/produse.ejs#L531)
+- [Închiderea modalului](views/pagini/produse.ejs#L621)
+
+### 7. Stilizare Bootstrap și temă
+
+Filtrele și butoanele sunt stilizate cu Bootstrap și personalizate în CSS/Sass pentru a respecta tema visuală SteelVector. Inputurile sunt organizate în grid Bootstrap, iar tema se propagă pe toate paginile prin variabile CSS.
+
+Referințe:
+- [Variabile tema și wrapper-ul selectorului](resurse/css/general.css#L170)
+- [Stilizări pentru produse, modal și paginare](resurse/css/produse.css#L472)
+
+### 8. Verificări suplimentare făcute
+
+Au fost făcute verificări de sintaxă și de diagnostic editor pentru fișierele schimbate. Problema raportată inițial, `elementePerPagina is not defined`, a fost corectată prin transmiterea explicită a valorii în render-ul inițial al paginii de produse.
+
+Verificări rulate:
+- `node --check index.js`
+- diagnostic EJS/CSS în editor pentru fișierele modificate
+- smoke test EJS pentru [views/pagini/produse.ejs](views/pagini/produse.ejs) și [views/pagini/produs.ejs](views/pagini/produs.ejs) cu date simulate și `ipUtilizator`
+
+Rezultatul verificărilor a fost curat la momentul ultimei rulări. În timpul verificărilor am corectat două probleme reale: `elementePerPagina` nu era trimis în randarea inițială a paginii de produse, iar pagina de produs unic presupunea greșit că certificările sunt mereu un șir, deși serverul le transmite ca vector pregătit pentru afișare.
+
 ## Identificator: format-entitati
 Aplicatie de sortare, filtrare si calculare
 

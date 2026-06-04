@@ -414,6 +414,207 @@
   background: linear-gradient(145deg, #f0f2f5, #fff);
   color: #1c2b39;
 }
+.tema-light .produs-card .btn-actiune {
+  background: rgba(255, 255, 255, 0.85);
+  color: #f99b41 !important;
+}
+.tema-light .produs-card .btn-actiune:hover {
+  background: rgba(249, 155, 65, 0.12);
+  color: #1c2b39 !important;
+}
+.tema-light .produs-card .btn-actiune.activ {
+  color: #fff !important;
+}
+.tema-light .produs-detaliu .produs-imagine-carousel {
+  background: rgba(255, 255, 255, 0.9);
+}
+.tema-light .produs-detaliu .produs-imagine-carousel img {
+  border-color: rgba(249, 155, 65, 0.35);
+}
+.tema-light .produs-detaliu .produs-imagine-controls {
+  color: #1c2b39;
+}
+.tema-light .produs-detaliu .produs-imagine-controls #produs-imagine-indicator {
+  color: #f99b41;
+}
+
+.produs-head {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.produs-actiuni {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.btn-actiune {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  border: 1px solid rgba(249, 155, 65, 0.4);
+  background: rgba(28, 43, 57, 0.85);
+  color: #f99b41;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+  padding: 0;
+}
+.btn-actiune i {
+  font-size: 1rem;
+  line-height: 1;
+  color: inherit;
+}
+.btn-actiune:hover {
+  transform: translateY(-1px);
+  background: #f99b41;
+  color: #fff !important;
+}
+.btn-actiune.activ {
+  background: #f99b41;
+  color: #fff !important;
+  border-color: #f99b41;
+}
+
+.produs-card.produs-fixat {
+  border-color: rgba(249, 155, 65, 0.75);
+  box-shadow: 0 0 0 2px rgba(249, 155, 65, 0.18), 0 0 24px rgba(249, 155, 65, 0.08);
+}
+.produs-card.produs-fixat .btn-actiune[data-actie=fixeaza] {
+  background: #f99b41;
+  color: #fff !important;
+  border-color: #f99b41;
+}
+
+.produs-ascuns-temporar {
+  display: none !important;
+}
+
+.paginare-produse {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+.paginare-produse .btn.active {
+  background-color: #f99b41 !important;
+  border-color: #f99b41 !important;
+  color: #fff !important;
+}
+
+.modal-produs {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 14, 20, 0.78);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+}
+.modal-produs[hidden] {
+  display: none;
+}
+
+.modal-produs-box {
+  width: min(1100px, 96vw);
+  max-height: 90vh;
+  overflow: auto;
+  background: linear-gradient(145deg, #1c2b39, #0f1c27);
+  border: 2px solid rgba(249, 155, 65, 0.45);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  display: grid;
+  grid-template-columns: minmax(280px, 420px) 1fr;
+  gap: 1.25rem;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.modal-produs-inchide {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1px solid rgba(249, 155, 65, 0.5);
+  background: #0f1c27;
+  color: #fff;
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.modal-produs-inchide:hover {
+  background: #f99b41;
+  color: #fff;
+}
+
+.modal-produs-media img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 0.8rem;
+  border: 2px solid rgba(249, 155, 65, 0.35);
+}
+
+.modal-produs-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.modal-produs-info h3 {
+  color: #e8edf2;
+  margin-bottom: 0.5rem;
+}
+.modal-produs-info p, .modal-produs-info li {
+  color: rgba(232, 237, 242, 0.85);
+}
+.modal-produs-info ul {
+  margin-left: 1.2rem;
+}
+
+.modal-produs-badges {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.produs-imagine-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.produs-imagine-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: #e8edf2;
+}
+
+#produs-imagine-indicator {
+  min-width: 4rem;
+  text-align: center;
+  color: #f99b41;
+  font-weight: 700;
+}
 
 @media screen and (max-width: 860px) {
   .produs-card .produs-layout {
@@ -438,6 +639,18 @@
   }
   .produs-detaliu .produs-detaliu-imagine img {
     width: 70%;
+  }
+  .modal-produs-box {
+    grid-template-columns: 1fr;
+  }
+  .modal-produs-media img {
+    height: 260px;
+  }
+  .produs-head {
+    flex-direction: column;
+  }
+  .produs-actiuni {
+    justify-content: flex-start;
   }
 }
 @media screen and (max-width: 540px) {

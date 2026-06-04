@@ -534,6 +534,234 @@ $sv-light:    #e8edf2;
     background: linear-gradient(145deg, #f0f2f5, #fff);
     color: $sv-dark;
   }
+
+  .produs-card {
+    .btn-actiune {
+      background: rgba(255, 255, 255, 0.85);
+      color: $sv-orange !important;
+
+      &:hover {
+        background: rgba($sv-orange, 0.12);
+        color: $sv-dark !important;
+      }
+
+      &.activ {
+        color: #fff !important;
+      }
+    }
+  }
+
+  .produs-detaliu {
+    .produs-imagine-carousel {
+      background: rgba(255, 255, 255, 0.9);
+
+      img {
+        border-color: rgba($sv-orange, 0.35);
+      }
+    }
+
+    .produs-imagine-controls {
+      color: $sv-dark;
+
+      #produs-imagine-indicator {
+        color: $sv-orange;
+      }
+    }
+  }
+}
+
+// ── Butoane acțiuni, modal și carusel (aduse din CSS backup) ──
+.produs-head {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.produs-actiuni {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.btn-actiune {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  border: 1px solid rgba($sv-orange, 0.4);
+  background: rgba($sv-dark, 0.85);
+  color: $sv-orange;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+  padding: 0;
+
+  i {
+    font-size: 1rem;
+    line-height: 1;
+    color: inherit;
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+    background: $sv-orange;
+    color: #fff !important;
+  }
+
+  &.activ {
+    background: $sv-orange;
+    color: #fff !important;
+    border-color: $sv-orange;
+  }
+}
+
+.produs-card.produs-fixat {
+  border-color: rgba($sv-orange, 0.75);
+  box-shadow: 0 0 0 2px rgba($sv-orange, 0.18), 0 0 24px rgba($sv-orange, 0.08);
+
+  .btn-actiune[data-actie="fixeaza"] {
+    background: $sv-orange;
+    color: #fff !important;
+    border-color: $sv-orange;
+  }
+}
+
+.produs-ascuns-temporar {
+  display: none !important;
+}
+
+.paginare-produse {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+
+  .btn.active {
+    background-color: $sv-orange !important;
+    border-color: $sv-orange !important;
+    color: #fff !important;
+  }
+}
+
+// ── Modal produse ─────────────────────────────────────────────
+.modal-produs {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 14, 20, 0.78);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.modal-produs-box {
+  width: min(1100px, 96vw);
+  max-height: 90vh;
+  overflow: auto;
+  background: linear-gradient(145deg, $sv-dark, $sv-deep);
+  border: 2px solid rgba($sv-orange, 0.45);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  display: grid;
+  grid-template-columns: minmax(280px, 420px) 1fr;
+  gap: 1.25rem;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.modal-produs-inchide {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1px solid rgba($sv-orange, 0.5);
+  background: $sv-deep;
+  color: #fff;
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+
+  &:hover {
+    background: $sv-orange;
+    color: #fff;
+  }
+}
+
+.modal-produs-media {
+  img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 0.8rem;
+    border: 2px solid rgba($sv-orange, 0.35);
+  }
+}
+
+.modal-produs-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.modal-produs-info {
+  h3 {
+    color: $sv-light;
+    margin-bottom: 0.5rem;
+  }
+
+  p, li {
+    color: rgba($sv-light, 0.85);
+  }
+
+  ul {
+    margin-left: 1.2rem;
+  }
+}
+
+.modal-produs-badges {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+// ── Carusel imagini multiple pe produs.ejs ────────────────────
+.produs-imagine-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.produs-imagine-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: $sv-light;
+}
+
+#produs-imagine-indicator {
+  min-width: 4rem;
+  text-align: center;
+  color: $sv-orange;
+  font-weight: 700;
 }
 
 // ── Responsive ────────────────────────────────────────────────
@@ -566,6 +794,22 @@ $sv-light:    #e8edf2;
       width: 70%;
     }
   }
+
+  .modal-produs-box {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-produs-media img {
+    height: 260px;
+  }
+
+  .produs-head {
+    flex-direction: column;
+  }
+
+  .produs-actiuni {
+    justify-content: flex-start;
+  }
 }
 
 @media screen and (max-width: 540px) {
@@ -585,3 +829,4 @@ $sv-light:    #e8edf2;
     font-size: 1.6rem;
   }
 }
+

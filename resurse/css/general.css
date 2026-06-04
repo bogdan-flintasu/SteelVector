@@ -167,6 +167,57 @@ body {
     background-color: var(--culoare_background);
 }
 
+body.tema-light {
+    --culoare_background: #f4f7fb;
+    --culoare-contur: #b85b16;
+    --culoare-highlight: #d9e4ee;
+    --culoare-text: #1d2730;
+    --culoare-titlu: #14202c;
+    --culoare-link-vizitat: #2e5e8b;
+}
+
+body.tema-copper {
+    --culoare_background: #201611;
+    --culoare-contur: #e08a3f;
+    --culoare-highlight: #3b271d;
+    --culoare-text: #f4eadf;
+    --culoare-titlu: #fff5e8;
+    --culoare-link-vizitat: #f2b37b;
+}
+
+#tema-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.75rem 0;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+#tema-toggle-wrapper #tema-toggle-label {
+    color: var(--culoare-titlu);
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+#tema-toggle-wrapper #tema-toggle-label i {
+    color: var(--culoare-contur);
+    margin-right: 0.3rem;
+}
+
+#tema-toggle-wrapper select {
+    min-width: 11rem;
+    max-width: 100%;
+    background-color: var(--culoare-highlight);
+    color: var(--culoare-titlu);
+    border: 1px solid rgba(249, 155, 65, 0.45);
+}
+
+#tema-toggle-wrapper select:focus {
+    border-color: var(--culoare-contur);
+    box-shadow: 0 0 0 0.2rem rgba(249, 155, 65, 0.2);
+}
+
 html,
 body {
     max-width: 100vw;

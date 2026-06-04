@@ -21,8 +21,20 @@
 
             <div class="produs-detaliu-layout">
                 <div class="produs-detaliu-imagine">
-                    <img src="/resurse/imagini/galerie/<%= produs.imagine %>"
-                        alt="<%= produs.nume %>" class="img-fluid">
+                    <!-- Bonus 9: afisam imaginea principala si permitem trecerea intre variantele disponibile -->
+                    <div class="produs-imagine-carousel" id="produs-imagine-carousel" data-imagini='<%- JSON.stringify(produs.imagine_varianta || ["/resurse/imagini/galerie/" + produs.imagine]) %>'>
+                        <img src="<%= (produs.imagine_varianta && produs.imagine_varianta.length > 0) ? produs.imagine_varianta[0] : '/resurse/imagini/galerie/' + produs.imagine %>"
+                            alt="<%= produs.nume %>" class="img-fluid" id="produs-imagine-curenta">
+                        <div class="produs-imagine-controls">
+                            <button type="button" class="btn btn-outline-primary" id="produs-imagine-prev" title="Imaginea precedentă">
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <span id="produs-imagine-indicator"></span>
+                            <button type="button" class="btn btn-outline-primary" id="produs-imagine-next" title="Imaginea următoare">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="produs-detaliu-info">
@@ -72,8 +84,9 @@
                             <tr>
                                 <th><i class="bi bi-award"></i> Certificări</th>
                                 <td>
-                                    <% if (produs.certificari) { %>
-                                        <% produs.certificari.split(',').forEach(c => { %>
+                                    <% const certificariAfisare = Array.isArray(produs.certificari) ? produs.certificari : String(produs.certificari || '').split(','); %>
+                                    <% if (certificariAfisare.filter(c => c && String(c).trim()).length > 0) { %>
+                                        <% certificariAfisare.forEach(c => { %>
                                             <span class="badge bg-info text-dark me-1"><%= c.trim() %></span>
                                         <% }); %>
                                     <% } else { %>
@@ -117,10 +130,41 @@
 
     <script>
     (function() {
-        const temaSalvata = localStorage.getItem("sv-tema");
-        if (temaSalvata === "light") {
-            document.body.classList.add("tema-light");
+        // Bonus 9: controlam rotirea imaginilor din pagina produsului.
+        const carousel = document.getElementById('produs-imagine-carousel');
+        const imagine = document.getElementById('produs-imagine-curenta');
+        const prev = document.getElementById('produs-imagine-prev');
+        const next = document.getElementById('produs-imagine-next');
+        const indicator = document.getElementById('produs-imagine-indicator');
+        const imagini = JSON.parse(carousel.dataset.imagini || '[]');
+        let index = 0;
+
+        function actualizeaza() {
+            if (!imagini.length) {
+                indicator.textContent = '0 / 0';
+                return;
+            }
+
+            imagine.src = imagini[index];
+            imagine.alt = '<%= produs.nume %>';
+            indicator.textContent = `${index + 1} / ${imagini.length}`;
+            prev.disabled = imagini.length < 2;
+            next.disabled = imagini.length < 2;
         }
+
+        prev.addEventListener('click', () => {
+            if (imagini.length < 2) return;
+            index = (index - 1 + imagini.length) % imagini.length;
+            actualizeaza();
+        });
+
+        next.addEventListener('click', () => {
+            if (imagini.length < 2) return;
+            index = (index + 1) % imagini.length;
+            actualizeaza();
+        });
+
+        actualizeaza();
     })();
     </script>
 </body>
